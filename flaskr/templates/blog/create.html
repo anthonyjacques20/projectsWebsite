@@ -20,6 +20,14 @@
 					<input class="form-control" type="text" name="image" value="{{ request.form['image'] }}">
 				</div>
 				<div class="form-group">
+                    <label for="githubURL">GitHub URL</label>
+					<input class="form-control" type="text" name="githubURL" value="{{ request.form['githubURL'] }}">
+				</div>
+				<div class="form-group">
+                    <label for="moreInfoURL">More Info URL</label>
+					<input class="form-control" type="text" name="moreInfoURL" value="{{ request.form['moreInfoURL'] }}">
+				</div>
+				<div class="form-group">
                     <label for="body">Body</label>
                     <textarea name="body">{{ request.form['body'] }}</textarea>
 				</div>
