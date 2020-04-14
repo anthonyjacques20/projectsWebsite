@@ -13,24 +13,25 @@
     {% endif %}
 
     <div class="container">
-        {% for post in posts %}
-            <div class="row">
-                <div class="col-sm-8 blog-main">
-                    <div class="blog-post">
-                        <h2 class="blog-post-title">{{ post['title'] }}</h2>
-                        <p class="blog-post-meta">{{ post['created'].strftime('%Y-%m-%d') }} by {{ post['username'] }}</p>
-
-                        {% if g.user['id'] == post['autho_id'] %}
-                            <a class="btn btn-info" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+        <div class="card-deck">
+            {% for post in posts %}
+                <div class="card">
+                    <img src="{{ post['image'] }}" alt="{{ post['title'] }}" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post['title'] }}</h5>
+                        <p class="card-text">{{ post['body'] }}</p>
+                        {% if post['githubURL'] is not none %}
+                            <a href="{{ post['githubURL'] }}" target="_blank" class="btn btn-primary">GitHub</a>
                         {% endif %}
-
-                        <p>{{ post['body'] }}</p>
+                        {% if post['moreInfoURL'] is not none %}
+                            <a href="{{ post['moreInfoURL'] }}" target="_blank" class="btn btn-info">More Information</a>
+                        {% endif %}
                     </div>
                 </div>
-            </div>
-            {% if not loop.last %}
-                <hr>
-            {% endif %}
-        {% endfor %}
+                {% if not loop.last %}
+                    <hr>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
