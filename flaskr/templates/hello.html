@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Baller time!{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Hobby Projects</h1>
+            <p class="lead">A website to demonstrate and document some of the my hobby/side projects. - Anthony Jacques</p>
+            <hr class="my-4">
+            <p>This website was built using Python and Flask.</p>
+            <p class="lead">
+            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card-deck">
+            <div class="card">
+              <img class="card-img-top" src="{{url_for('static', filename='SeniorProjectRearView.jpg')}}" alt="SeniorProjectRearView.jpg">
+              <div class="card-body">
+                <h5 class="card-title">Senior Project</h5>
+                <p class="card-text">Used an arduino with different physical inputs (heartbeat sensors) and outputs (turn signals) to create both an exercise and safety system.  Utilized object oriented programming in C to create user objects with weight, age, height, calories burned, etc.</p>
+                <a href="#" class="btn btn-primary">Card link</a>
+                <a href="#" class="btn btn-primary">Another link</a>
+              </div>
+            </div>
+            <div class="card">
+              <img class="card-img-top" src="https://images.unsplash.com/photo-1535016120720-40c646be5580?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80" alt="projector.jpeg">
+              <div class="card-body">
+                <h5 class="card-title">Linear Motion Cabinet</h5>
+                <p class="card-text">Hobby project to build a cabinet that has uses a Raspberry Pi and a worm gear to raise and lower the cabinet.  The ultimate goal being to be able put a projector in the cabinet and be able to hide the projector when it is not in use.  I am planning on incorporating commands into a Google Home to be able to send request to the Raspberry Pi.</p>
+                <a href="#" class="btn btn-primary">Card link</a>
+                <a href="#" class="btn btn-primary">Another link</a>
+              </div>
+              <div class="card-footer">
+                  <p>Project is ongoing and not complete yet.</p>
+              </div>
+            </div>
+            <div class="card">
+              <img class="card-img-top" src="https://images.unsplash.com/photo-1563299796-17596ed6b017?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Web Developer Bootcamp</h5>
+                <p class="card-text">Completed a web developer bootcamp using NodeJS, Express, and MongoDB to create a website for sharing and commenting on campgrounds.</p>
+                <a href="#" class="btn btn-primary">Card link</a>
+                <a href="#" class="btn btn-primary">Another link</a>
+              </div>
+            </div>
+          </div>
+    </div>
+{% endblock %}

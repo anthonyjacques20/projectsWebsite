@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='blog.css') }}">
+{% endblock %}
+
+
+{% block title %}Posts{% endblock %}
+
+{% block content %}
+    {% if g.user %}
+        <a class="action" href="{{ url_for('blog.create') }}">New</a>
+    {% endif %}
+
+    <div class="container">
+        {% for post in posts %}
+            <div class="row">
+                <div class="col-sm-8 blog-main">
+                    <div class="blog-post">
+                        <h2 class="blog-post-title">{{ post['title'] }}</h2>
+                        <p class="blog-post-meta">{{ post['created'].strftime('%Y-%m-%d') }} by {{ post['username'] }}</p>
+
+                        {% if g.user['id'] == post['autho_id'] %}
+                            <a class="btn btn-info" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+                        {% endif %}
+
+                        <p>{{ post['body'] }}</p>
+                    </div>
+                </div>
+            </div>
+            {% if not loop.last %}
+                <hr>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
