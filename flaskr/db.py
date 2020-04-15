@@ -16,6 +16,7 @@ def get_db():
         )
         #This tells theconnection to return rows that behave like dicts
         g.db.row_factory = sqlite3.Row
+        print("Added db to g")
 
     return g.db
 
