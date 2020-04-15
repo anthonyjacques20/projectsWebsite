@@ -38,7 +38,7 @@ def register():
 
         flash(error)
 
-    return render_template('auth/register.html')
+    return render_template('auth/register.html', page="register")
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
@@ -67,7 +67,7 @@ def login():
 
         flash(error)
 
-    return render_template('auth/login.html')
+    return render_template('auth/login.html', page="login")
 
 #This registers a function to run before the view function, no matter what URL is requested
 @bp.before_app_request
