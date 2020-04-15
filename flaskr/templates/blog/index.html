@@ -26,6 +26,11 @@
                         {% if post['moreInfoURL'] is not none %}
                             <a href="{{ post['moreInfoURL'] }}" target="_blank" class="btn btn-info">More Information</a>
                         {% endif %}
+                        {% if g.user['id'] == post['author_id']%}
+                            <div class="mt-2">
+                                <a href="/{{ post['id'] }}/edit" class="btn btn-info">Edit</a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% if not loop.last %}
