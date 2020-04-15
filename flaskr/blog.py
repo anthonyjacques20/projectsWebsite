@@ -21,7 +21,7 @@ def index():
 
 @bp.route('/<int:id>')
 def show(id):
-    post = get_post(id)
+    post = get_post(id, check_author=False)
     return render_template('blog/show.html', post=post)
 
 @bp.route('/create', methods=('GET', 'POST'))
