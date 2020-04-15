@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post['title'] }}{% endblock %}
+
+{% block content %}
+{# Trying to overlay div on top of an image
+    <div class="hero">
+        <span id="cafe" role="img" aria-label="{{ post['title'] }}" style="background-image: url({{ post['image'] }})">
+            <div class="inner text-light">
+                <div class="container">
+                    <div id="myJumbotron" class="text-dark">
+                        <div class="container">
+                            <h2>{{post['title']}}</h2>
+                            <p>{{ post['body'] }}</p>
+                            {% if post['githubURL'] is not none %}
+                                <a href="{{ post['githubURL'] }}" target="_blank" class="btn btn-primary">GitHub</a>
+                            {% endif %}
+                            {% if post['moreInfoURL'] is not none %}
+                                <a href="{{ post['moreInfoURL'] }}" target="_blank" class="btn btn-info">More Information</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <span class="inner text-light"><h1>Hola!</h1></span>
+        </span>
+    </div>
+#}
+
+    <div class="jumbotron text-center" style="background: url({{ post['image'] }}) center center / cover no-repeat;">
+        <div class="container text-light">
+            <h1 class="display-6">{{ post['title'] }}</h1>
+                <p class="lead mx-5 px-5">{{ post['body'] }}</p>
+                {% if post['githubURL'] is not none %}
+                    <a href="{{ post['githubURL'] }}" target="_blank" class="btn btn-primary">GitHub</a>
+                {% endif %}
+                {% if post['moreInfoURL'] is not none %}
+                    <a href="{{ post['moreInfoURL'] }}" target="_blank" class="btn btn-info">More Information</a>
+                {% endif %}
+        </div>
+    </div>
+
+
+
+
+{#
+    <section id="header" class="jumbotron" style="background: url({{ post['image'] }}) center center / cover no-repeat;">
+        <div id="nestedDescription" class="jumbotron">
+            <h3 class="display-6">{{ post['title'] }}</h1>
+            <p class="lead">{{ post['body'] }}</p>
+            {% if post['githubURL'] is not none %}
+                <a href="{{ post['githubURL'] }}" target="_blank" class="btn btn-primary">GitHub</a>
+            {% endif %}
+            {% if post['moreInfoURL'] is not none %}
+                <a href="{{ post['moreInfoURL'] }}" target="_blank" class="btn btn-info">More Information</a>
+            {% endif %}
+        </div>
+    </section>
+#}  
+{% endblock %}
