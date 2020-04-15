@@ -2,3 +2,17 @@
     height: 3rem;
     margin-left: 1rem;
 }
+
+#header { 
+    background: center center / cover no-repeat;
+    position: relative;
+    height: 60%;
+}
+
+#nestedDescription {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+}
