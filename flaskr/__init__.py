@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, g
 
 def create_app(test_config=None):
     #Create the app
@@ -29,6 +29,18 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
 	    return render_template('hello.html')
+
+    #About route
+    @app.route("/about")
+    def about():
+        return render_template('about.html')
+
+    @app.before_request
+    def hook():
+        posts = blog.get_posts()
+        if 'posts' not in g:
+            g.posts = posts
+            print("Added posts to g")
 
     from . import db
     db.init_app(app)
