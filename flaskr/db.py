@@ -58,11 +58,18 @@ def seed_db(db = None):
             "title": "Linear Motion Cabinet",
             "body": "Project to build a cabinet that has uses a Raspberry Pi and a worm gear to raise and lower the cabinet. The ultimate goal being to be able put a projector in the cabinet and be able to hide the projector when it is not in use. I am planning on incorporating commands into a Google Home to be able to send request to the Raspberry Pi.",
             "author_id": user['id'],
-            "image": "https://images.unsplash.com/photo-1535016120720-40c646be5580?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
+            "image": "https://images.unsplash.com/photo-1535016120720-40c646be5580?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80",
+            "githubURL": "https://github.com/anthonyjacques20/Linear-Motion-Cabinet"
         },
         {
             "title": "Web Developer Bootcamp",
-            "body": "Completed a web developer bootcamp using NodeJS, Express, and MongoDB to create a website for sharing and commenting on campgrounds.",
+            "body": "Completed a web developer bootcamp using NodeJS, Express, and MongoDB to learn about web development.",
+            "author_id": user['id'],
+            "image": "https://images.unsplash.com/photo-1472437774355-71ab6752b434?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1867&q=80"
+        },
+        {
+            "title": "YelpCamp",
+            "body": "A large project creating a website for sharing and commenting on campgrounds.  Used NodeJS, Express, and MongoDB.",
             "author_id": user['id'],
             "image": "https://images.unsplash.com/photo-1563299796-17596ed6b017?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80",
             "githubURL": "https://github.com/anthonyjacques20/yelpcamp"
