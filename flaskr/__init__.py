@@ -30,6 +30,11 @@ def create_app(test_config=None):
     def hello():
 	    return render_template('hello.html')
 
+    #About route
+    @app.route("/about")
+    def about():
+        return render_template('about.html')
+
     @app.before_request
     def hook():
         posts = blog.get_posts()
