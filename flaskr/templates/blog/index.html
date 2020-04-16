@@ -12,9 +12,6 @@
     <h1 class="display-4 text-center">
         Project-Oriented Programming
     </h1>
-    {% if g.user %}
-        <a class="action" href="{{ url_for('blog.create') }}">New</a>
-    {% endif %}
 
     <div class="container">
         <div class="row">
@@ -47,6 +44,13 @@
                 </div>
             {% endfor %}
         </div>
+        {% if g.user %}
+            <a class="btn btn-primary btn-block my-3" href="{{ url_for('blog.create') }}">Add New Project</a>
+        {% endif %}
+        <div id="footerSpacer">
+        </div>
     </div>
+
+    
 </div>
 {% endblock %}
