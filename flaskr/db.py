@@ -14,7 +14,7 @@ def get_db():
             current_app.config['DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES
         )
-        #This tells theconnection to return rows that behave like dicts
+        #This tells the connection to return rows that behave like dicts
         g.db.row_factory = sqlite3.Row
         print("Added db to g")
 
@@ -90,13 +90,15 @@ def seed_db(db = None):
     #Save the data
     db.commit()
 
-def init_db():
+def init_db(seedDB = False):
     db = get_db()
 
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
-    seed_db(db)
+    #Only seed the database if requested
+    if seedDB:
+        seed_db(db)
 
 #Create a command line command and return a messag eto the user
 @click.command('init-db')
