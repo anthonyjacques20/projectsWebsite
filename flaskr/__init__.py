@@ -9,6 +9,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
+        #This is where we map to our database file at /instance/flaskr.sqlite
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
 
@@ -29,6 +30,10 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
 	    return render_template('hello.html')
+
+    @app.route('/helloWorld')
+    def helloWorld():
+        return "Hello World!"
 
     #About route
     @app.route("/about")
