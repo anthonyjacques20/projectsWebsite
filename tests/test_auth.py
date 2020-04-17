@@ -1,6 +1,6 @@
 import pytest
 from flask import g, session
-from flaskr.db import get_db
+from hobbyProjectWebsite.db import get_db
 
 def test_register(client, app):
     #Make sure the page responds with status of 200

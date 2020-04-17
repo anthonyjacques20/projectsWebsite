@@ -5,12 +5,12 @@ from flask import Flask, render_template, g
 def create_app(test_config=None):
     #Create the app
     #instance_relative_config=True tells the app that the configuration files are relative tothe instance folder
-    #The instance folder is located outside the flaskr package and can hold local data that shouldn't be committed to version control
+    #The instance folder is located outside the hobbyProjectWebsite package and can hold local data that shouldn't be committed to version control
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        #This is where we map to our database file at /instance/flaskr.sqlite
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        #This is where we map to our database file at /instance/hobbyProjectWebsite.sqlite
+        DATABASE=os.path.join(app.instance_path, 'hobbyProjectWebsite.sqlite'),
     )
 
     if test_config is None:
