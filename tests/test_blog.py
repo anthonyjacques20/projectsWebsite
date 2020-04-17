@@ -1,5 +1,5 @@
 import pytest
-
+from flask import g, session
 from flaskr.db import get_db
 
 def test_index(client, auth):
@@ -30,7 +30,7 @@ def test_login_required(client, path):
 
 def test_author_required(app, client, auth):
     #Change the post author to another user
-    with app.app_context:
+    with app.app_context():
         db = get_db()
         db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
         db.commit()
@@ -54,8 +54,12 @@ def test_exists_required(client, auth, path):
 #Confirm we can create a second post
 def test_create(client, auth, app):
     auth.login()
+
     assert client.get('/create').status_code == 200
-    client.post('/create', data={'title': 'created', 'body': ''})
+    response = client.post(
+        '/create',
+        data={'title': 'created', 'body': 'createdBody', 'image': '', 'githubURL': '', 'moreInfoURL': ''},
+    )
 
     with app.app_context():
         db = get_db()
@@ -66,7 +70,20 @@ def test_create(client, auth, app):
 def test_update(client, auth, app):
     auth.login()
     assert client.get('/1/edit').status_code == 200
-    client.post('/1/edit', data={'title': 'edited', 'body': ''})
+    with app.app_context():
+        db = get_db()
+        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
+
+    client.post(
+        '/1/edit',
+        data={
+            'title': 'edited',
+            'body': post['body'],
+            'image': post['image'],
+            'githubURL': post['githubURL'],
+            'moreInfoURL': post['moreInfoURL']
+        }
+    )
 
     with app.app_context():
         db = get_db()
@@ -80,7 +97,8 @@ def test_update(client, auth, app):
 ))
 def test_create_update_validate(client, auth, path):
     auth.login()
-    response = client.post(path, data={'title': '', 'body': ''})
+    response = client.post(path, data={'title': '', 'body': '', 'image': 'image text', 'githubURL': 'github text', 'moreInfoURL': 'more info url text'})
+    print(response, response.status_code)
     assert b'Title is required.' in response.data
 
 def test_delete(client, auth, app):

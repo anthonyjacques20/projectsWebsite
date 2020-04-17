@@ -14,7 +14,7 @@ def get_db():
             current_app.config['DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES
         )
-        #This tells theconnection to return rows that behave like dicts
+        #This tells the connection to return rows that behave like dicts
         g.db.row_factory = sqlite3.Row
         print("Added db to g")
 
