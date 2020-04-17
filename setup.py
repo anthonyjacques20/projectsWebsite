@@ -1,8 +1,8 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='flaskr',
-    version='0.0.2',
+    name='hobbyProjectWebsite',
+    version='0.1.0',
     #Tells python what package directories to include
     packages=find_packages(),
     #Tells python to include data specified in MANIFEST.in file
