@@ -9,6 +9,7 @@ from flask.cli import with_appcontext
 from werkzeug.security import check_password_hash, generate_password_hash
 
 def get_db():
+    print("The current app config for database: " + current_app.config['DATABASE'])
     if 'db' not in g:
         g.db = sqlite3.connect(
             current_app.config['DATABASE'],
