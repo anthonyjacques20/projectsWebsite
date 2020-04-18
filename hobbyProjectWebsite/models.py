@@ -1,17 +1,19 @@
 from hobbyProjectWebsite import db
 from sqlalchemy.dialects.postgresql import JSON
+import datetime 
 
-
-class Result(db.Model):
-    __tablename__ = 'results'
-
-    id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String())
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key = True, sqllite_autoincrement = True)
+    username = db.Column(db.Text,  nullable = False, unique = True)
+    password = db.Column(db.Text, nullable = False)
+    
+    
     result_all = db.Column(JSON)
     result_no_stop_words = db.Column(JSON)
 
-    def __init__(self, url, result_all, result_no_stop_words):
-        self.url = url
+    def __init__(self, title, result_all, result_no_stop_words):
+        self.title = title
         self.result_all = result_all
         self.result_no_stop_words = result_no_stop_words
 
@@ -19,31 +21,25 @@ class Result(db.Model):
         return '<id {}>'.format(self.id)
 
 
-# from hobbyProjectWebsite import create_app
-# from sqlalchemy.dialects.postgresql import JSON
-# import datetime 
+class Project(db.Model):
+    __tablename__ = 'projects'
 
-# db =create_app().db
+    id = db.Column(db.Integer, primary_key = True, sqllite_autoincrement = True)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
+    created = db.Column(db.DateTime, nullable = False, default = datetime.datetime.utcnow)
+    title = db.Column(db.Text, nullable = False)
+    body = db.Column(db.Text, nullable = False)
+    image = db.Column(db.Text, default = None)
+    githubURL = db.Column(db.Text, default = None)
+    moreInfoURL = db.Column(db.Text, default = None)
 
-# class Result(db.Model):
-#     __tablename__ = 'results'
+    result_all = db.Column(JSON)
+    result_no_stop_words = db.Column(JSON)
 
-#     id = db.Column(db.Integer, primary_key = True, sqllite_autoincrement = True)
-#     # author_id = db.Column(db.Integer, nullable = False)
-#     # created = db.Column(db.DateTime, nullable = False, default = datetime.datetime.utcnow)
-#     title = db.Column(db.Text, nullable = False)
-#     body = db.Column(db.Text, nullable = False)
-#     # image = db.Column(db.Text, default = None)
-#     # githubURL = db.Column(db.Text, default = None)
-#     # moreInfoURL = db.Column(db.Text, default = None)
+    def __init__(self, title, result_all, result_no_stop_words):
+        self.title = title
+        self.result_all = result_all
+        self.result_no_stop_words = result_no_stop_words
 
-#     result_all = db.Column(JSON)
-#     result_no_stop_words = db.Column(JSON)
-
-#     def __init__(self, title, result_all, result_no_stop_words):
-#         self.title = title
-#         self.result_all = result_all
-#         self.result_no_stop_words = result_no_stop_words
-
-#     def __repr__(self):
-#         return '<id {}>'.format(self.id)
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
