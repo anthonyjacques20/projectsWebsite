@@ -100,7 +100,7 @@ def init_db(seedDB = False):
     if seedDB:
         seed_db(db)
 
-#Create a command line command and return a messag eto the user
+#Create a command line command and return a message to the user
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
