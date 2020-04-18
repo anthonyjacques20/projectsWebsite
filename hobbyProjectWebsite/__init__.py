@@ -1,6 +1,8 @@
 import os
 
 from flask import Flask, render_template, g
+from flask_sqlalchemy import SQLAlchemy
+
 
 def create_app(test_config=None):
     #Create the app
@@ -8,8 +10,14 @@ def create_app(test_config=None):
     #The instance folder is located outside the hobbyProjectWebsite package and can hold local data that shouldn't be committed to version control
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
+        #Use Postgres
+        SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL'],
+        SQLALCHEMY_TRACK_MODIFICATIONS = False,
+        DEVELOPMENT = True,
+        DEBUG = True,
+        CSRF_ENABLED = True
         #This is where we map to our database file at /instance/hobbyProjectWebsite.sqlite
-        DATABASE=os.path.join(app.instance_path, 'hobbyProjectWebsite.sqlite'),
+        #DATABASE=os.path.join(app.instance_path, 'hobbyProjectWebsite.sqlite'),
     )
     print("Hobby Project Website app.instance_path: " + app.instance_path)
 
@@ -60,4 +68,10 @@ def create_app(test_config=None):
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='index')
 
+    # db = SQLAlchemy(app)
+    # from hobbyProjectWebsite.models import Result
+
     return app
+
+db = SQLAlchemy(create_app())
+from hobbyProjectWebsite.models import Result
