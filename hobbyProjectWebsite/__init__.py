@@ -23,7 +23,9 @@ def create_app(test_config=None):
     #Ensure the instance path exists
     try:
         os.makedirs(app.instance_path)
+        print("Successfully created the instance directory")
     except OSError:
+        print("Error creating the instance directory")
         pass
 
     #Simple route to return
