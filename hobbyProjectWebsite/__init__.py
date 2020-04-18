@@ -11,6 +11,7 @@ def create_app(test_config=None):
         #This is where we map to our database file at /instance/hobbyProjectWebsite.sqlite
         DATABASE=os.path.join(app.instance_path, 'hobbyProjectWebsite.sqlite'),
     )
+    print("Hobby Project Website app.instance_path: " + app.instance_path)
 
     if test_config is None:
         #Load config from the config.py file in the instance folder (when it exists)
