@@ -74,4 +74,4 @@ def create_app(test_config=None):
     return app
 
 db = SQLAlchemy(create_app())
-from hobbyProjectWebsite.models import Result
+from hobbyProjectWebsite.models import User, Project
