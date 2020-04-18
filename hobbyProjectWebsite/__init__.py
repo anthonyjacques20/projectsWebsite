@@ -4,7 +4,7 @@ from flask import Flask, render_template, g
 
 def create_app(test_config=None):
     #Create the app
-    #instance_relative_config=True tells the app that the configuration files are relative tothe instance folder
+    #instance_relative_config=True tells the app that the configuration files are relative to the instance folder
     #The instance folder is located outside the hobbyProjectWebsite package and can hold local data that shouldn't be committed to version control
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
