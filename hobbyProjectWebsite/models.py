@@ -32,7 +32,7 @@ class Project(db.Model):
     created = db.Column(db.DateTime, nullable = False, default = datetime.datetime.utcnow)
     title = db.Column(db.Text, nullable = False)
     body = db.Column(db.Text, nullable = False)
-    image = db.Column(db.Text, default = None)
+    image = db.Column(db.Text, default = None, nullable = False)
     githubURL = db.Column(db.Text, default = None)
     moreInfoURL = db.Column(db.Text, default = None)
 
