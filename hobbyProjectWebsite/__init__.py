@@ -9,16 +9,8 @@ def create_app(test_config=None):
     #instance_relative_config=True tells the app that the configuration files are relative to the instance folder
     #The instance folder is located outside the hobbyProjectWebsite package and can hold local data that shouldn't be committed to version control
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        #Use Postgres
-        SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL'],
-        SQLALCHEMY_TRACK_MODIFICATIONS = False,
-        DEVELOPMENT = True,
-        DEBUG = True,
-        CSRF_ENABLED = True
-        #This is where we map to our database file at /instance/hobbyProjectWebsite.sqlite
-        #DATABASE=os.path.join(app.instance_path, 'hobbyProjectWebsite.sqlite'),
-    )
+    app.config.from_object(os.environment['APP_SETTINGS'])
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     print("Hobby Project Website app.instance_path: " + app.instance_path)
 
     if test_config is None:
