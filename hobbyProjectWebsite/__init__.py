@@ -57,9 +57,6 @@ def create_app(test_config=None):
             g.posts = posts
             print("Added posts to g")
 
-    from . import db
-    db.init_app(app)
-
     from . import auth
     app.register_blueprint(auth.bp)
 
@@ -68,10 +65,8 @@ def create_app(test_config=None):
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='index')
 
-    # db = SQLAlchemy(app)
-    # from hobbyProjectWebsite.models import Result
+    #Initialize the SQLAlchemy app
+    from hobbyProjectWebsite.models import db
+    db.init_app(app)
 
     return app
-
-db = SQLAlchemy(create_app())
-from hobbyProjectWebsite.models import User, Project

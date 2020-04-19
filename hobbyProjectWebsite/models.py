@@ -1,6 +1,9 @@
-from hobbyProjectWebsite import db
 from sqlalchemy.dialects.postgresql import JSON
+from flask_sqlalchemy import SQLAlchemy
 import datetime 
+
+#Create a globally accessible database
+db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = 'users'

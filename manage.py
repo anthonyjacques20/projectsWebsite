@@ -2,7 +2,8 @@ import os
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from hobbyProjectWebsite import create_app, db
+from hobbyProjectWebsite import create_app
+from hobbyProjectWebsite.models import db
 
 app = create_app()
 migrate = Migrate(app, db)
