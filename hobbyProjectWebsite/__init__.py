@@ -9,7 +9,7 @@ def create_app(test_config=None):
     #instance_relative_config=True tells the app that the configuration files are relative to the instance folder
     #The instance folder is located outside the hobbyProjectWebsite package and can hold local data that shouldn't be committed to version control
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_object(os.environment['APP_SETTINGS'])
+    app.config.from_object(os.environ['APP_SETTINGS'])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     print("Hobby Project Website app.instance_path: " + app.instance_path)
 
