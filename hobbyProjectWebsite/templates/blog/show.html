@@ -7,11 +7,11 @@
         <div class="container text-light">
             <h1 class="display-6">{{ post['title'] }}</h1>
                 <p class="lead mx-5 px-5">{{ post['body'] }}</p>
-                {% if post['githubURL'] is not none %}
-                    <a href="{{ post['githubURL'] }}" target="_blank" class="btn btn-primary">GitHub</a>
+                {% if post['githuburl'] is not none and post['githuburl'] != '' %}
+                    <a href="{{ post['githuburl'] }}" target="_blank" class="btn btn-primary">GitHub</a>
                 {% endif %}
-                {% if post['moreInfoURL'] is not none %}
-                    <a href="{{ post['moreInfoURL'] }}" target="_blank" class="btn btn-info">More Information</a>
+                {% if post['moreinfourl'] is not none and post['moreinfourl'] != '' %}
+                    <a href="{{ post['moreinfourl'] }}" target="_blank" class="btn btn-info">More Information</a>
                 {% endif %}
         </div>
     </div>
