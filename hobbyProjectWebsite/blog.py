@@ -26,8 +26,8 @@ def create():
         title = request.form['title']
         body = request.form['body']
         image = request.form['image']
-        githubURL = request.form['githubURL']
-        moreInfoURL = request.form['moreInfoURL']
+        githuburl = request.form['githuburl']
+        moreinfourl = request.form['moreinfourl']
         error = None
         
         if not title:
@@ -42,8 +42,8 @@ def create():
                 title = title,
                 body = body,
                 image = image,
-                githubURL = githubURL,
-                moreInfoURL = moreInfoURL
+                githuburl = githuburl,
+                moreinfourl = moreinfourl
             )
             db.session.add(project)
             db.session.commit()
@@ -53,7 +53,15 @@ def create():
     return render_template('blog/create.html')
 
 def get_posts():
-    projects = Project.query.all()
+    projects = db.engine.execute(
+        'SELECT p.id, p.title, p.body, p.image, p.githubURL, p.moreinfoURL, p.created, p.author_id, u.username'
+        ' FROM projects p JOIN users u ON p.author_id = u.id'
+        ' ORDER BY created DESC'
+    )
+    columns = ['id', 'title', 'body', 'image', 'githuburl', 'moreinfourl', 'created', 'author_id', 'username']
+    #Convert to a dictionary
+    projects = [{columns[i]: project[columns[i]] for i in range(0,len(project)) } for project in projects]
+    #projects = Project.query.all()
     return projects
 
 def get_post(id, check_author=True):
@@ -64,16 +72,16 @@ def get_post(id, check_author=True):
         ' FROM projects p JOIN users u ON p.author_id = u.id'
         ' WHERE p.id = ' + str(id)
     ).first()
-    columns = ['id', 'title', 'body', 'image', 'githuburl', 'moreinfourl', 'created', 'author_id', 'username']
-    #Convert to a dictionary
-    project = {columns[i]: project[columns[i]] for i in range(0,len(project)) }
-    print("Project dictionary: ", project)
-
+    
     if project is None:
         abort(404, "Project id {0} doesn't exist.".format(id))
 
     if check_author and project['author_id'] != g.user['id']:
         abort(403)
+
+    columns = ['id', 'title', 'body', 'image', 'githuburl', 'moreinfourl', 'created', 'author_id', 'username']
+    #Convert to a dictionary
+    project = {columns[i]: project[columns[i]] for i in range(0,len(project)) }
 
     return project
 
@@ -87,8 +95,8 @@ def edit(id):
         project['title'] = request.form['title']
         project['body'] = request.form['body']
         project['image'] = request.form['image']
-        project['githuburl'] = request.form['githubURL']
-        project['moreinfourl'] = request.form['moreInfoURL']
+        project['githuburl'] = request.form['githuburl']
+        project['moreinfourl'] = request.form['moreinfourl']
         error = None
 
         if not project['title']:
@@ -113,6 +121,5 @@ def edit(id):
 @login_required
 def delete(id):
     get_post(id)
-    db.execute('DELETE FROM post WHERE id = ?', (id,))
-    db.commit()
+    db.engine.execute('DELETE FROM projects WHERE id = ' + str(id))
     return redirect(url_for('blog.index'))
