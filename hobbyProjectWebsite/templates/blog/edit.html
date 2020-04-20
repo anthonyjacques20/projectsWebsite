@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Edit "{{ post['title'] }}"{% endblock %}
+{% block title %}Edit "{{ project['title'] }}"{% endblock %}
 
 {% block content %}
 <div class="container">
 	<div class="row justify-content-center">
 		<div class="formHeader">
-			<h1>Edit "{{ post['title'] }}"</h1>
+			<h1>Edit "{{ project['title'] }}"</h1>
 		</div>
 	</div>
 	<div class="row justify-content-center">
@@ -13,30 +13,30 @@
 			<form method="POST">
 				<div class="form-group">
                     <label for="title">Title</label>
-					<input class="form-control" type="text" name="title" value="{{ request.form['title'] or post['title'] }}" required>
+					<input class="form-control" type="text" name="title" value="{{ request.form['title'] or project['title'] }}" required>
 				</div>
 				<div class="form-group">
                     <label for="body">Body</label>
-                    <textarea name="body">{{ request.form['body'] or post['body'] }}</textarea>
+                    <textarea name="body">{{ request.form['body'] or project['body'] }}</textarea>
 				</div>
 				<div class="form-group">
                     <label for="image">Image</label>
-					<input class="form-control" type="text" name="image" value="{{ request.form['image'] or post['image'] }}">
+					<input class="form-control" type="text" name="image" value="{{ request.form['image'] or project['image'] }}">
 				</div>
 				<div class="form-group">
                     <label for="githubURL">GitHub URL</label>
-					<input class="form-control" type="text" name="githubURL" value="{{ request.form['githubURL'] or post['githubURL'] }}">
+					<input class="form-control" type="text" name="githubURL" value="{{ request.form['githubURL'] or project['githubURL'] }}">
 				</div>
 				<div class="form-group">
                     <label for="moreInfoURL">More Info URL</label>
-					<input class="form-control" type="text" name="moreInfoURL" value="{{ request.form['moreInfoURL'] or post['moreInfoURL'] }}">
+					<input class="form-control" type="text" name="moreInfoURL" value="{{ request.form['moreInfoURL'] or project['moreInfoURL'] }}">
 				</div>
 				<div class="form-group">
 					<button class="btn btn-primary btn-large btn-block">Save</button>
 				</div>				
             </form>
             
-            <form action="{{ url_for('blog.delete', id=post['id']) }}" method="post">
+            <form action="{{ url_for('blog.delete', id=project['id']) }}" method="post">
                 <button class="btn btn-danger btn-large btn-block" onclick="return confirm('Are you sure?');">Delete</button>
             </form>
 

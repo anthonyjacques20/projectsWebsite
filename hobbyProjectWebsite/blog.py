@@ -106,7 +106,7 @@ def edit(id):
             db.session.commit()
             return redirect(url_for('blog.index'))
 
-    return render_template('blog/edit.html', post=post)
+    return render_template('blog/edit.html', project=project)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
