@@ -37,7 +37,7 @@ def create():
             flash(error)
         else:
             project = Project(
-                author_id = g.user.id,
+                author_id = g.user['id'],
                 created = datetime.now(),
                 title = title,
                 body = body,
