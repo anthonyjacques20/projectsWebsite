@@ -4,34 +4,33 @@ import tempfile
 #Unit and functional testing module
 import pytest
 from hobbyProjectWebsite import create_app
-from hobbyProjectWebsite.db import get_db, init_db
+from hobbyProjectWebsite.db import init_db
+from hobbyProjectWebsite.models import db
 
 with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
     _data_sql = f.read().decode('utf8')
 
 @pytest.fixture
 def app():
-    #Create and return a temporary unique file for our database file
-    #As opposed to our instance/hobbyProjectWebsite.sqlite file
-    db_fd, db_path = tempfile.mkstemp()
+    #Provide the path to our testing database
+    db_path = 'postgresql:///hobbyprojectwebsite_test'
 
     app = create_app({
         #Tell flask that the app is in test mode
         'TESTING': True,
-        #Override the db_path with the new path of the temporary file
-        'DATABASE': db_path,
+        'CSRF_ENABLED': True,
+        'SECRET_KEY': os.environ['SECRET_KEY'],
+        'SQLALCHEMY_DATABASE_URI': db_path,
+        'SQLALCHEMY_TRACK_MODIFICATIONS': False
     })
 
     with app.app_context():
         #Initialize the DB
-        init_db()
-        #Ge the database and add our data in tests/data.sql
-        get_db().executescript(_data_sql)
+        #This will drop tables, recreate tables, and fill in with default data
+        #Note that this happens for EVERY test
+        init_db(db)
 
     yield app
-
-    os.close(db_fd)
-    os.unlink(db_path)
 
 @pytest.fixture
 def client(app):
