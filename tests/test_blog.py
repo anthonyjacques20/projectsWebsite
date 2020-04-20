@@ -1,6 +1,6 @@
 import pytest
 from flask import g, session
-from hobbyProjectWebsite.db import get_db
+from hobbyProjectWebsite.models import db
 
 def test_index(client, auth):
     response = client.get('/')
@@ -15,7 +15,7 @@ def test_index(client, auth):
     #Check the data
     assert b'test title' in response.data
     assert b'by test on 2018-01-01' in response.data
-    assert b'test\nbody' in response.data
+    assert b'test body' in response.data
     #Check for the edit button since the logged in user wrote this test post
     assert b'href="/1/edit"' in response.data
 
@@ -31,9 +31,7 @@ def test_login_required(client, path):
 def test_author_required(app, client, auth):
     #Change the post author to another user
     with app.app_context():
-        db = get_db()
-        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
-        db.commit()
+        db.engine.execute('UPDATE projects SET author_id = 2 WHERE id = 1')
 
     auth.login()
     #Current user can't modify other user's post
@@ -58,12 +56,11 @@ def test_create(client, auth, app):
     assert client.get('/create').status_code == 200
     response = client.post(
         '/create',
-        data={'title': 'created', 'body': 'createdBody', 'image': '', 'githubURL': '', 'moreInfoURL': ''},
+        data={'title': 'created', 'body': 'createdBody', 'image': '', 'githuburl': '', 'moreinfourl': ''},
     )
 
     with app.app_context():
-        db = get_db()
-        count = db.execute('SELECT COUNT(id) FROM post').fetchone()[0]
+        count = db.engine.execute('SELECT COUNT(id) FROM projects').fetchone()[0]
         assert count == 2
 
 #Test that we can update a post
@@ -71,23 +68,24 @@ def test_update(client, auth, app):
     auth.login()
     assert client.get('/1/edit').status_code == 200
     with app.app_context():
-        db = get_db()
-        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
+        post = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
 
-    client.post(
+    print(post)
+    print(post['body'])
+    response = client.post(
         '/1/edit',
         data={
             'title': 'edited',
             'body': post['body'],
             'image': post['image'],
-            'githubURL': post['githubURL'],
-            'moreInfoURL': post['moreInfoURL']
+            'githuburl': post['githuburl'],
+            'moreinfourl': post['moreinfourl']
         }
     )
+    print(response)
 
     with app.app_context():
-        db = get_db()
-        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
+        post = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
         assert post['title'] == 'edited'
 
 #Show an error on invalid title/body data
@@ -97,7 +95,7 @@ def test_update(client, auth, app):
 ))
 def test_create_update_validate(client, auth, path):
     auth.login()
-    response = client.post(path, data={'title': '', 'body': '', 'image': 'image text', 'githubURL': 'github text', 'moreInfoURL': 'more info url text'})
+    response = client.post(path, data={'title': '', 'body': '', 'image': 'image text', 'githuburl': 'github text', 'moreinfourl': 'more info url text'})
     print(response, response.status_code)
     assert b'Title is required.' in response.data
 
@@ -107,6 +105,5 @@ def test_delete(client, auth, app):
     assert response.headers['Location'] == 'http://localhost/'
 
     with app.app_context():
-        db = get_db()
-        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
+        post = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
         assert post is None

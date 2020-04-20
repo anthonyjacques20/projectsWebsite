@@ -1,6 +1,6 @@
 import pytest
 from flask import g, session
-from hobbyProjectWebsite.db import get_db
+from hobbyProjectWebsite.models import db
 
 def test_register(client, app):
     #Make sure the page responds with status of 200
@@ -8,14 +8,15 @@ def test_register(client, app):
     response = client.post(
         '/auth/register', data={'username': 'a', 'password': 'a'}
     )
+    print(response)
     #On a successful register, we get redirected to the login page
     #response.headers will have a `Location` header when the register view redirects to the login view
     assert 'http://localhost/auth/login' == response.headers['Location']
 
     with app.app_context():
-        assert get_db().execute(
-            "SELECT * FROM user WHERE username = 'a'",
-        ).fetchone() is not None
+        assert db.engine.execute(
+            "SELECT * FROM users WHERE username = 'a'",
+        ).first() is not None
 
 #Tell pytest to run the same test function with different arguments
 @pytest.mark.parametrize(('username', 'password', 'message'),(
