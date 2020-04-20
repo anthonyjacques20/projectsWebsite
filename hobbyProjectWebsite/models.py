@@ -15,13 +15,15 @@ class User(db.Model):
     result_all = db.Column(JSON)
     result_no_stop_words = db.Column(JSON)
 
-    def __init__(self, title, result_all, result_no_stop_words):
-        self.title = title
-        self.result_all = result_all
-        self.result_no_stop_words = result_no_stop_words
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
+
+    def __len__(self):
+        return 3
 
 
 class Project(db.Model):
@@ -33,16 +35,23 @@ class Project(db.Model):
     title = db.Column(db.Text, nullable = False)
     body = db.Column(db.Text, nullable = False)
     image = db.Column(db.Text, default = None, nullable = False)
-    githubURL = db.Column(db.Text, default = None)
-    moreInfoURL = db.Column(db.Text, default = None)
+    githuburl = db.Column(db.Text, default = None)
+    moreinfourl = db.Column(db.Text, default = None)
 
     result_all = db.Column(JSON)
     result_no_stop_words = db.Column(JSON)
 
-    def __init__(self, title, result_all, result_no_stop_words):
+    def __init__(self, author_id, created, title, body, image, githuburl = None, moreinfourl = None):
+        self.author_id = author_id
+        self.created = created
         self.title = title
-        self.result_all = result_all
-        self.result_no_stop_words = result_no_stop_words
+        self.body = body
+        self.image = image
+        self.githuburl = githuburl
+        self.moreinfourl = moreinfourl
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
+
+    def __len__(self):
+        return 8
