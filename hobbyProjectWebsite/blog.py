@@ -5,7 +5,8 @@ from datetime import datetime
 from werkzeug.exceptions import abort
 
 from hobbyProjectWebsite.auth import login_required
-from hobbyProjectWebsite.models import db, Project, User
+from hobbyProjectWebsite.db import db
+from hobbyProjectWebsite.models import Project, User
 
 bp = Blueprint('blog', __name__)
 

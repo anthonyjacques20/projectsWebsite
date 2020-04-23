@@ -4,8 +4,7 @@ import tempfile
 #Unit and functional testing module
 import pytest
 from hobbyProjectWebsite import create_app
-from hobbyProjectWebsite.db import init_db
-from hobbyProjectWebsite.models import db
+from hobbyProjectWebsite.db import init_db, db
 
 with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
     _data_sql = f.read().decode('utf8')
