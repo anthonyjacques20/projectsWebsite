@@ -52,7 +52,7 @@ def create_app(test_config=None):
     app.add_url_rule('/', endpoint='index')
 
     #Initialize the SQLAlchemy app
-    from hobbyProjectWebsite.models import db
+    from hobbyProjectWebsite.db import db
     db.init_app(app)
 
     return app
