@@ -5,7 +5,7 @@ from hobbyProjectWebsite.db import db
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key = True, sqllite_autoincrement = True)
+    id = Column(Integer, primary_key = True)
     username = Column(Text,  nullable = False, unique = True)
     password = Column(Text, nullable = False)
     
@@ -27,7 +27,7 @@ class User(db.Model):
 class Project(db.Model):
     __tablename__ = 'projects'
 
-    id = Column(Integer, primary_key = True, sqllite_autoincrement = True)
+    id = Column(Integer, primary_key = True)
     author_id = Column(Integer, ForeignKey("users.id"), nullable = False)
     created = Column(DateTime, nullable = False, default = datetime.datetime.utcnow)
     title = Column(Text, nullable = False)
