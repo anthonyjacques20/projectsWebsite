@@ -7,7 +7,6 @@ from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 from hobbyProjectWebsite import create_app
 from werkzeug.security import check_password_hash, generate_password_hash
-from hobbyProjectWebsite.models import User, Project
 
 #Create a globally accessible database
 db = SQLAlchemy()
