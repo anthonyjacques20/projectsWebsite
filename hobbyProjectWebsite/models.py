@@ -1,19 +1,17 @@
 from sqlalchemy.dialects.postgresql import JSON
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, ForeignKey, Integer, Text, DateTime
 import datetime 
-
-#Create a globally accessible database
-db = SQLAlchemy()
+from hobbyProjectWebsite.db import db
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key = True, sqllite_autoincrement = True)
-    username = db.Column(db.Text,  nullable = False, unique = True)
-    password = db.Column(db.Text, nullable = False)
+    id = Column(Integer, primary_key = True)
+    username = Column(Text,  nullable = False, unique = True)
+    password = Column(Text, nullable = False)
     
     
-    result_all = db.Column(JSON)
-    result_no_stop_words = db.Column(JSON)
+    result_all = Column(JSON)
+    result_no_stop_words = Column(JSON)
 
     def __init__(self, username, password):
         self.username = username
@@ -29,17 +27,17 @@ class User(db.Model):
 class Project(db.Model):
     __tablename__ = 'projects'
 
-    id = db.Column(db.Integer, primary_key = True, sqllite_autoincrement = True)
-    author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
-    created = db.Column(db.DateTime, nullable = False, default = datetime.datetime.utcnow)
-    title = db.Column(db.Text, nullable = False)
-    body = db.Column(db.Text, nullable = False)
-    image = db.Column(db.Text, default = None, nullable = False)
-    githuburl = db.Column(db.Text, default = None)
-    moreinfourl = db.Column(db.Text, default = None)
+    id = Column(Integer, primary_key = True)
+    author_id = Column(Integer, ForeignKey("users.id"), nullable = False)
+    created = Column(DateTime, nullable = False, default = datetime.datetime.utcnow)
+    title = Column(Text, nullable = False)
+    body = Column(Text, nullable = False)
+    image = Column(Text, default = None, nullable = False)
+    githuburl = Column(Text, default = None)
+    moreinfourl = Column(Text, default = None)
 
-    result_all = db.Column(JSON)
-    result_no_stop_words = db.Column(JSON)
+    result_all = Column(JSON)
+    result_no_stop_words = Column(JSON)
 
     def __init__(self, author_id, created, title, body, image, githuburl = None, moreinfourl = None):
         self.author_id = author_id
