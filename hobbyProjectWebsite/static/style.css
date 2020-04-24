@@ -20,3 +20,16 @@
 h1 {
     font-family: 'Roboto Mono', monospace;
 }
+
+.authImage {
+    background-image: url("/static/projectImage.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+}
+
+.authRow {
+    min-height: calc(100vh - 134px);
+}
