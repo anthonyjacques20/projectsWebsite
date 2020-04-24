@@ -23,12 +23,21 @@ h1 {
 
 /* Make the div have a background and take up left side of the window */
 .authImage {
-    background-image: url("/static/projectImage.jpeg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     position: relative;
     z-index: 1;
+}
+
+.projectImage{
+    background-image: url("/static/projectImage.jpeg");
+}
+
+.newProjectImage{
+    background: #f7ff00;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #db36a4, #f7ff00);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #db36a4, #f7ff00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */    
 }
 
 /* On the login and register page, make the row the size of the view window - the height of the navbar and footer */
