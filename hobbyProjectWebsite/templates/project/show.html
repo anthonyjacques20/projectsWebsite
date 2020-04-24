@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project['title'] }}{% endblock %}
+
+{% block content %}
+    <div class="jumbotron text-center" style="background: url({{ project['image'] }}) center center / cover no-repeat;">
+        <div class="container text-light">
+            <h1 class="display-6">{{ project['title'] }}</h1>
+                <p class="lead mx-5 px-5">{{ project['body'] }}</p>
+                {% if project['githuburl'] is not none and project['githuburl'] != '' %}
+                    <a href="{{ project['githuburl'] }}" target="_blank" class="btn btn-primary">GitHub</a>
+                {% endif %}
+                {% if project['moreinfourl'] is not none and project['moreinfourl'] != '' %}
+                    <a href="{{ project['moreinfourl'] }}" target="_blank" class="btn btn-info">More Information</a>
+                {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <p>{{ project['body'] }}</p>
+    </div>
+{% endblock %}
