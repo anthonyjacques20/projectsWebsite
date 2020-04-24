@@ -20,3 +20,48 @@
 h1 {
     font-family: 'Roboto Mono', monospace;
 }
+
+/* Make the div have a background and take up left side of the window */
+.authImage {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+}
+
+.projectImage{
+    background-image: url("/static/projectImage.jpeg");
+}
+
+.newProjectImage{
+    background: #f7ff00;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #db36a4, #f7ff00);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #db36a4, #f7ff00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */    
+}
+
+/* On the login and register page, make the row the size of the view window - the height of the navbar and footer */
+.authRow {
+    min-height: calc(100vh - 134px);
+}
+
+/* Hide the excess of the card */
+.card{
+    overflow: hidden;
+}
+
+/* Hide the overflow on the anchor tag in which the image exists */
+.card a{
+    overflow: hidden;
+}
+
+/* Make the zoom in transition smoother and hide the overflow */
+.card img{
+    overflow: hidden;
+    transition: 1.5s ease;
+}
+
+/* Zoom in on the picture when we hover over that anchor in a card */
+.card a:hover img {
+    transform: scale(1.15);
+}
