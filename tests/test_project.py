@@ -16,7 +16,7 @@ def test_index(client, auth):
     assert b'test title' in response.data
     assert b'by test on 2018-01-01' in response.data
     assert b'test body' in response.data
-    #Check for the edit button since the logged in user wrote this test post
+    #Check for the edit button since the logged in user wrote this test project
     assert b'href="/1/edit"' in response.data
 
 @pytest.mark.parametrize('path',(
@@ -29,12 +29,12 @@ def test_login_required(client, path):
     assert response.headers['Location'] == 'http://localhost/auth/login'
 
 def test_author_required(app, client, auth):
-    #Change the post author to another user
+    #Change the project author to another user
     with app.app_context():
         db.engine.execute('UPDATE projects SET author_id = 2 WHERE id = 1')
 
     auth.login()
-    #Current user can't modify other user's post
+    #Current user can't modify other user's project
     assert client.post('/1/edit').status_code == 403
     assert client.post('/1/delete').status_code == 403
     #Current user should not see edit link
@@ -68,25 +68,25 @@ def test_update(client, auth, app):
     auth.login()
     assert client.get('/1/edit').status_code == 200
     with app.app_context():
-        post = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
+        project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
 
-    print(post)
-    print(post['body'])
+    print(project)
+    print(project['body'])
     response = client.post(
         '/1/edit',
         data={
             'title': 'edited',
-            'body': post['body'],
-            'image': post['image'],
-            'githuburl': post['githuburl'],
-            'moreinfourl': post['moreinfourl']
+            'body': project['body'],
+            'image': project['image'],
+            'githuburl': project['githuburl'],
+            'moreinfourl': project['moreinfourl']
         }
     )
     print(response)
 
     with app.app_context():
-        post = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
-        assert post['title'] == 'edited'
+        project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
+        assert project['title'] == 'edited'
 
 #Show an error on invalid title/body data
 @pytest.mark.parametrize('path', (
@@ -105,5 +105,5 @@ def test_delete(client, auth, app):
     assert response.headers['Location'] == 'http://localhost/'
 
     with app.app_context():
-        post = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
-        assert post is None
+        project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
+        assert project is None
