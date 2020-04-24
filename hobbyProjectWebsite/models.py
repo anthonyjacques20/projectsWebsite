@@ -53,3 +53,25 @@ class Project(db.Model):
 
     def __len__(self):
         return 8
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = Column(Integer, primary_key = True)
+    text = Column(Text,  nullable = False, unique = True)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable = False)
+    author_id = Column(Integer, ForeignKey("users.id"), nullable = False)
+    
+    
+    result_all = Column(JSON)
+    result_no_stop_words = Column(JSON)
+
+    def __init__(self, username, password):
+        self.text = text
+        self.project_id = project_id
+        self.author_id = author_id
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
+
+    def __len__(self):
+        return 3

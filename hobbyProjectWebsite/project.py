@@ -6,7 +6,7 @@ from werkzeug.exceptions import abort
 
 from hobbyProjectWebsite.auth import login_required
 from hobbyProjectWebsite.db import db
-from hobbyProjectWebsite.models import Project, User
+from hobbyProjectWebsite.models import Project, User, Comment
 
 bp = Blueprint('project', __name__)
 
