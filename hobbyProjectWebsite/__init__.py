@@ -38,17 +38,17 @@ def create_app(test_config=None):
 
     @app.before_request
     def hook():
-        posts = blog.get_posts()
-        if 'posts' not in g:
-            g.posts = posts
-            print("Added posts to g")
+        projects = project.get_projects()
+        if 'projects' not in g:
+            g.projects = projects
+            print("Added projects to g")
 
     from . import auth
     app.register_blueprint(auth.bp)
 
-    #The blog blueprint does not have an `url_prefix` because it will be at '/'
-    from . import blog
-    app.register_blueprint(blog.bp)
+    #The project blueprint does not have an `url_prefix` because it will be at '/'
+    from . import project
+    app.register_blueprint(project.bp)
     app.add_url_rule('/', endpoint='index')
 
     #Initialize the SQLAlchemy app

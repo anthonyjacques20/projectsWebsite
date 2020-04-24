@@ -8,17 +8,17 @@ from hobbyProjectWebsite.auth import login_required
 from hobbyProjectWebsite.db import db
 from hobbyProjectWebsite.models import Project, User
 
-bp = Blueprint('blog', __name__)
+bp = Blueprint('project', __name__)
 
 @bp.route('/')
 def index():
-    posts = get_posts()
-    return render_template('blog/index.html', posts=posts, page="home")
+    projects = get_projects()
+    return render_template('project/index.html', projects=projects, page="home")
 
 @bp.route('/<int:id>')
 def show(id):
-    post = get_post(id, check_author=False)
-    return render_template('blog/show.html', post=post)
+    project = get_project(id, check_author=False)
+    return render_template('project/show.html', project=project)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
@@ -49,11 +49,11 @@ def create():
             db.session.add(project)
             db.session.commit()
 
-            return redirect(url_for('blog.index'))
+            return redirect(url_for('project.index'))
     
-    return render_template('blog/create.html')
+    return render_template('project/create.html')
 
-def get_posts():
+def get_projects():
     projects = db.engine.execute(
         'SELECT p.id, p.title, p.body, p.image, p.githubURL, p.moreinfoURL, p.created, p.author_id, u.username'
         ' FROM projects p JOIN users u ON p.author_id = u.id'
@@ -65,7 +65,7 @@ def get_posts():
     #projects = Project.query.all()
     return projects
 
-def get_post(id, check_author=True):
+def get_project(id, check_author=True):
     #Another example of how to perform a join using SQLAlechemy rather than raw SQL
     #project = db.session.query(Project, User).join(User, Project.author_id == User.id).first()
     project = db.engine.execute(
@@ -73,7 +73,7 @@ def get_post(id, check_author=True):
         ' FROM projects p JOIN users u ON p.author_id = u.id'
         ' WHERE p.id = ' + str(id)
     ).first()
-    
+
     if project is None:
         abort(404, "Project id {0} doesn't exist.".format(id))
 
@@ -90,7 +90,7 @@ def get_post(id, check_author=True):
 @bp.route('/<int:id>/edit', methods=('GET', 'POST'))
 @login_required
 def edit(id):
-    project = get_post(id)
+    project = get_project(id)
 
     if request.method == 'POST':
         project['title'] = request.form['title']
@@ -113,14 +113,14 @@ def edit(id):
                 filter(Project.id == id).\
                 update(project)
             db.session.commit()
-            return redirect(url_for('blog.index'))
+            return redirect(url_for('project.index'))
 
-    return render_template('blog/edit.html', project=project)
+    return render_template('project/edit.html', project=project)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
-    get_post(id)
+    get_project(id)
     db.engine.execute('DELETE FROM projects WHERE id = ' + str(id))
-    return redirect(url_for('blog.index'))
+    return redirect(url_for('project.index'))

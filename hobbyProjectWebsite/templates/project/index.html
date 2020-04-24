@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='blog.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='project.css') }}">
 {% endblock %}
 
 
@@ -15,38 +15,38 @@
 
     <div class="container">
         <div class="row">
-            {% for post in posts %}
+            {% for project in projects %}
                     <div class="col-md-6 {% if loop.index % 4 == 0: %}
                                             order-md-{{ loop.index-1 }}
                                         {% elif loop.index % 4 ==3: %}
                                             order-md-{{ loop.index+1 }}
                                         {% endif %}">
                         <div class="card my-2 {% if loop.index % 2: %}bg-dark {% endif %}">
-                            <a href="/{{ post['id'] }}">
-                                <img src="{{ post['image'] }}" alt="{{ post['title'] }}" class="card-img-top">
+                            <a href="/{{ project['id'] }}">
+                                <img src="{{ project['image'] }}" alt="{{ project['title'] }}" class="card-img-top">
                             </a>
                             <div class="card-body {% if loop.index % 2: %}text-light{% endif %}">
-                                <h5 class="card-title">{{ post['title'] }}</h5>
-                                <p class="card-text">{{ post['body'] }}</p>
-                                {% if post['githuburl'] is not none and post['githuburl'] != '' %}
-                                    <a href="{{ post['githuburl'] }}" target="_blank" class="btn btn-primary">GitHub</a>
+                                <h5 class="card-title">{{ project['title'] }}</h5>
+                                <p class="card-text">{{ project['body'] }}</p>
+                                {% if project['githuburl'] is not none and project['githuburl'] != '' %}
+                                    <a href="{{ project['githuburl'] }}" target="_blank" class="btn btn-primary">GitHub</a>
                                 {% endif %}
-                                {% if post['moreinfourl'] is not none and post['moreinfourl'] != '' %}
-                                    <a href="{{ post['moreinfourl'] }}" target="_blank" class="btn btn-info">More Information</a>
+                                {% if project['moreinfourl'] is not none and project['moreinfourl'] != '' %}
+                                    <a href="{{ project['moreinfourl'] }}" target="_blank" class="btn btn-info">More Information</a>
                                 {% endif %}
-                                {% if g.user['id'] == post['author_id']%}
+                                {% if g.user['id'] == project['author_id']%}
                                     <div class="mt-2">
-                                        <a href="/{{ post['id'] }}/edit" class="btn btn-info">Edit</a>
+                                        <a href="/{{ project['id'] }}/edit" class="btn btn-info">Edit</a>
                                     </div>
                                 {% endif %}
-                                <p class="card-text"><small class="text-muted">by {{ post['username'] }} on {{ post['created'] }}</small></p>
+                                <p class="card-text"><small class="text-muted">by {{ project['username'] }} on {{ project['created'] }}</small></p>
                             </div>
                         </div>
                     </div>
             {% endfor %}
         </div>
         {% if g.user %}
-            <a class="btn btn-primary btn-block my-3" href="{{ url_for('blog.create') }}">Add New Project</a>
+            <a class="btn btn-primary btn-block my-3" href="{{ url_for('project.create') }}">Add New Project</a>
         {% endif %}
         <div id="footerSpacer">
         </div>
