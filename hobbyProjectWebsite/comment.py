@@ -26,7 +26,7 @@ def create(id):
             error = 'Comment text is required.'
         
         if error is not None:
-            flash(error)
+            flash(error, 'error')
         else:
             comment = Comment(
                 text = text,
@@ -37,6 +37,7 @@ def create(id):
             #Add and commit the comment
             db.session.add(comment)
             db.session.commit()
+            flash("Successfully created comment", 'info')
 
         #Redirect to the show page with parameters
         return redirect(url_for('project.show', id=id))
