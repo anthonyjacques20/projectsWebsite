@@ -78,6 +78,18 @@ def edit(id, commentID):
 
         return render_template('comment/edit.html', projectID = id, comment = comment)
 
+@bp.route('/<int:commentID>/delete', methods=('POST',))
+@login_required
+def delete(id, commentID):
+    #Validate comment owner
+    getComment(commentID)
+
+    #Grab the comment and delete it
+    comment = Comment.query.filter_by(id=commentID).first()
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for('project.show', id=id))
+
 def getComment(commentID):
     #Join the users table and replace the user id with the username from the users table
     comment = Comment.query.join(User, Comment.author_id==User.id).add_columns(Comment.id, Comment.text, Comment.created, User.username, Comment.author_id).filter(Comment.id==commentID).first()
