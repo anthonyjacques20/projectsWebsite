@@ -30,11 +30,12 @@ def register():
                 password = generate_password_hash(password)
             )
             db.session.add(user)
-            db.session.commit()
             #Must call db.commit() to save the changese made in the insert above
+            db.session.commit()
+            flash("Successfully registered user: " + username, "success")
             return redirect(url_for('auth.login'))
 
-        flash(error)
+        flash(error, 'error')
 
     return render_template('auth/register.html', page="register")
 
@@ -58,9 +59,10 @@ def login():
             #With sub-sequent requests.  Flask signs the data so it can't be tampererd
             session.clear()
             session['user_id'] = user['id']
+            flash("Successfully logged in as " + username, "info")
             return redirect(url_for('index'))
 
-        flash(error)
+        flash(error, 'warning')
 
     return render_template('auth/login.html', page="login")
 
@@ -77,6 +79,8 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
+    #Flash the logout message
+    flash("Successfully logged out!", 'info')
     return redirect(url_for('index'))
 
 #Create a function to return the user
