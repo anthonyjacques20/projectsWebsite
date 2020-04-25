@@ -37,7 +37,7 @@ def create():
             error = 'Title is required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'error')
         else:
             project = Project(
                 author_id = g.user['id'],
@@ -50,7 +50,7 @@ def create():
             )
             db.session.add(project)
             db.session.commit()
-
+            flash("Successfully created project named: " + title, "success")
             return redirect(url_for('project.index'))
     
     return render_template('project/create.html')
@@ -106,7 +106,7 @@ def edit(id):
             error = 'Title is required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'error')
         else:
             #Delete the username from project as it is not in the Project model
             del project["username"]
@@ -115,6 +115,7 @@ def edit(id):
                 filter(Project.id == id).\
                 update(project)
             db.session.commit()
+            flash("Successfully updated project named: " + project['title'], "success")
             return redirect(url_for('project.index'))
 
     return render_template('project/edit.html', project=project)
