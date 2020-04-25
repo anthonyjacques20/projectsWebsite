@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Edit Comment{% endblock %}
+
+{% block content %}
+<div class="newProjectImage authRow">
+	<div class="container text-white">
+		<div class="row justify-content-center">
+			<div class="formHeader">
+				<h1 class="text-center">Edit Comment</h1>
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="mx-2 col-10 col-md-8 col-lg-6">
+                <form action="{{ url_for('comment.edit', id=projectID, commentID=comment['id']) }}" method="post">
+                    <div class="form-group row justify-content-around pb-3">
+                        <textarea class="form-control col-8" name="text" rows="1">{{ comment['text'] }}</textarea>
+                        <button class="btn btn-success btn-large col-3">Save!</button>
+                    </div>
+                </form>
+				
+				<div class="row mb-4">
+					<a class="pl-0" href="{{ url_for('project.index') }}">Home</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
