@@ -18,5 +18,43 @@
 
     <div class="container">
         <p>{{ project['body'] }}</p>
+        {% if comments|length > 0 %}
+            <hr>
+        {% endif %}
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                {% for comment in comments %}
+                    <li class="list-group-item">
+                        <div class="row justify-content-between">
+                            <div class="col-9">
+                                {{ comment['text'] }}
+                            </div>
+                            <div class="col-2 text-secondary">
+                                by {{ comment['username'] }} on {{ comment['created'].strftime('%Y-%m-%d') }}
+                            </div>
+                        </div>
+                    </li>
+                    {# <li class="list-group-item">{{ comment['text'] }}<span class="float-right">by {{ comment['author_id'] }} on {{ comment['created'].strftime('%Y-%m-%d') }}</span></li> #}
+                    {# <div class="row justify-content-between"> #}
+                        {# <li class="list-group-item">{{ comment['text'] }}</li>
+                        <li class="list-group-item text-secondary">by {{ comment['author_id'] }} on {{ comment['created'].strftime('%Y-%m-%d') }}</li> #}
+                    {# </div> #}
+                    {# <div class="card">
+                        <div class="card-body">
+                            {{ comment['text'] }}
+                        </div>
+                    </div> #}
+                {% endfor %}
+            </ul>
+        </div>
+        <hr>
+        {% if g.user %}
+            <form action="{{ url_for('comment.create', id=project['id']) }}" method="post">
+                <div class="form-group row justify-content-around pb-3">
+                    <textarea class="form-control col-8" name="text" rows="1" placeholder="Add a comment!"></textarea>
+                    <button class="btn btn-success btn-large col-3 col-lg-1">Submit!</button>
+                </div>
+            </form>
+        {% endif %}
     </div>
 {% endblock %}

@@ -6,7 +6,8 @@ from werkzeug.exceptions import abort
 
 from hobbyProjectWebsite.auth import login_required
 from hobbyProjectWebsite.db import db
-from hobbyProjectWebsite.models import Project, User
+from hobbyProjectWebsite.comment import get_comments
+from hobbyProjectWebsite.models import Project, User, Comment
 
 bp = Blueprint('project', __name__)
 
@@ -18,7 +19,8 @@ def index():
 @bp.route('/<int:id>')
 def show(id):
     project = get_project(id, check_author=False)
-    return render_template('project/show.html', project=project)
+    comments = get_comments(id)
+    return render_template('project/show.html', project = project, comments = comments)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required

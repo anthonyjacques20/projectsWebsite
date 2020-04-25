@@ -51,6 +51,9 @@ def create_app(test_config=None):
     app.register_blueprint(project.bp)
     app.add_url_rule('/', endpoint='index')
 
+    from . import comment
+    app.register_blueprint(comment.bp)
+
     #Initialize the SQLAlchemy app
     from hobbyProjectWebsite.db import db
     db.init_app(app)
