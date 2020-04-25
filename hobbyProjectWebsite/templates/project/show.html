@@ -32,8 +32,11 @@
                             <div class="col-2 text-secondary">
                                 <small class="d-none d-sm-inline">by {{ comment['username'] }} on {{ comment['created'].strftime('%Y-%m-%d %H:%M') }}</small>
                                 {% if g.user and (g.user['username'] == comment['username']) %}
-                                <div class="text-center">
+                                <div class="row justify-content-around">
                                     <a class="btn btn-info btn-sm" href="{{ url_for('comment.edit', id=project['id'], commentID=comment['id']) }}">Edit</a>
+                                    <form action="{{ url_for('comment.delete', id=project['id'], commentID=comment['id']) }}" method="post">
+                                        <button class="btn btn-danger btn-small" onclick="return confirm('Are you sure?');">Delete</button>
+                                    </form>
                                 </div>
                                 {% endif %}
                             </div>
