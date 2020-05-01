@@ -65,10 +65,13 @@ def edit(id, commentID):
             flash(error, 'error')
         else:
             comment = Comment.query.filter_by(id=commentID).first()
-            comment.text = text
-            #Commit the edited comment
-            db.session.commit()
-            flash("Successfully edited comment", 'info')
+            if comment is None:
+                flash('Comment not found and is unable to be edited', 'error')
+            else:
+                comment.text = text
+                #Commit the edited comment
+                db.session.commit()
+                flash("Successfully edited comment", 'info')
 
         #Redirect to the show page with parameters
         return redirect(url_for('project.show', id=id))
@@ -86,8 +89,11 @@ def delete(id, commentID):
 
     #Grab the comment and delete it
     comment = Comment.query.filter_by(id=commentID).first()
-    db.session.delete(comment)
-    db.session.commit()
+    if comment is None:
+        flash("Comment not found and unable to be deleted", "error")
+    else:
+        db.session.delete(comment)
+        db.session.commit()
     return redirect(url_for('project.show', id=id))
 
 def getComment(commentID):
