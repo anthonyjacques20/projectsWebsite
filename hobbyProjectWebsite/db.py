@@ -28,6 +28,10 @@ def init_db(db):
     insertProject = '''INSERT INTO projects (title, body, author_id, created, image, githubURL, moreInfoURL) VALUES
   ('test title', 'test body', 1, '2018-01-01 00:00:00', 'image text', 'github URL', 'more info URL');'''
 
+    insertComment = '''INSERT INTO comments (text, project_id, author_id, created) VALUES
+  ('test comment', 1, 1, '2021-02-02 00:00:00');'''
+
     #Execute statements
     db.engine.execute(insertUser)
     db.engine.execute(insertProject)
+    db.engine.execute(insertComment)
