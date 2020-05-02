@@ -76,16 +76,6 @@ def login():
 
     return render_template('auth/login.html', page="login")
 
-#This registers a function to run before the view function, no matter what URL is requested
-@bp.before_app_request
-def load_logged_in_user():
-    user_id = session.get('user_id')
-
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = getUserByID(user_id)
-
 @bp.route('/logout')
 def logout():
     logout_user()
