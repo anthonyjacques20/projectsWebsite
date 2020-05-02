@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, render_template, g
 from flask_sqlalchemy import SQLAlchemy
+from hobbyProjectWebsite.auth import loginManager
 
 
 def create_app(test_config=None):
@@ -57,5 +58,10 @@ def create_app(test_config=None):
     #Initialize the SQLAlchemy app
     from hobbyProjectWebsite.db import db
     db.init_app(app)
+
+    #Initialize Flask-Login
+    loginManager.init_app(app)
+    #Tell Flask-Login which function ('login') to use when trying to login
+    loginManager.login_view = 'auth.login'
 
     return app
