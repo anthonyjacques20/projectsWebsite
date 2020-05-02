@@ -13,11 +13,9 @@ db = SQLAlchemy()
 
 def init_db(db):
     #Drop all tables
-    print("Dropping tables!")
     db.drop_all()
 
     #Create all tables
-    print("Creating tables!")
     db.create_all()
 
     #Seed database
