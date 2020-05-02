@@ -1,6 +1,7 @@
 import pytest
 from flask import g, session
 from hobbyProjectWebsite.db import db
+from hobbyProjectWebsite.models import User, Project, Comment
 
 def test_index(client, auth):
     response = client.get('/1')
@@ -32,87 +33,86 @@ def test_comment_author_required(app, client, auth):
 #Return to show page if the comment requested doesn't exist
 def test_comment_edit_exists_required(client, auth):
     auth.login()
-    response = client.post('/1/comments/2/edit',)
-    print(response.status_code)
-    print(response.data)
+    response = client.post(
+        '/1/comments/2/edit',
+        data={
+            'text': 'edited comment text'
+        }
+    )
+    #Test that we redirect to the show page
     assert response.headers['Location'] == 'http://localhost/1'
-    # if 'edit' in path:
-    #     assert b'Comment not found and is unable to be edited' in response.data
-    # else:
-    #     assert b'Comment not found and unable to be deleted' in response.data
 
+    #Test that the flash message shows the error by following the redireict
+    response = client.post(
+        '/1/comments/2/edit',
+        data={
+            'text': 'edited comment text'
+        },
+        follow_redirects=True
+    )
+    assert b'Comment not found and is unable to be edited' in response.data
+    
 #Return to show page if the comment requested doesn't exist
 def test_comment_delete_exists_required(client, auth):
     auth.login()
+    response = client.post('/1/comments/2/delete')
+    #Test that we redirect to the show page
+    assert response.headers['Location'] == 'http://localhost/1'
+    
+    response = client.post('/1/comments/2/delete', follow_redirects=True)
+    #Test that the flash message shows the error by following the redirect
+    assert b'Comment not found and unable to be deleted' in response.data
+
+# #Confirm we can create a second comment
+def test_create_comment(client, auth, app):
+    auth.login()
+
+    with app.app_context():
+        #Confirm only one comment
+        assert db.session.query(Comment).count() == 1
+
     response = client.post(
-        '/1/comments/2/delete',
-         data={
-            'text': 'edited text'
+        '/1/comments/',
+        data={'text': 'This is the second comment'},
+    )
+
+    with app.app_context():
+        #Another way to grab the count from the comments table
+        count = db.engine.execute('SELECT COUNT(id) FROM comments').fetchone()[0]
+        assert count == 2
+
+# #Test that we can update a comment
+def test_update_comment(client, auth, app):
+    auth.login()
+    with app.app_context():
+        comment = Comment.query.filter_by(id=1).first()
+
+    response = client.post(
+        '/1/comments/1/edit',
+        data={
+            'text': 'edited comment text'
         }
     )
-    print(response.status_code)
-    print(response.data)
+
+    with app.app_context():
+        comment = db.engine.execute('SELECT * FROM comments WHERE id = 1').fetchone()
+        assert comment['text'] == 'edited comment text'
+
+#Show an error on invalid comment text data
+@pytest.mark.parametrize('path', (
+    '/1/comments/',
+    '/1/comments/1/edit',
+))
+def test_create_update_validate_comment(client, auth, path):
+    auth.login()
+    response = client.post(path, data={'text': ''}, follow_redirects=True)
+    assert b'Comment text is required.' in response.data
+
+def test_delete(client, auth, app):
+    auth.login()
+    response = client.post('/1/comments/1/delete')
     assert response.headers['Location'] == 'http://localhost/1'
-    # if 'edit' in path:
-    #     assert b'Comment not found and is unable to be edited' in response.data
-    # else:
-    #     assert b'Comment not found and unable 
 
-# #Confirm we can create a second post
-# def test_create(client, auth, app):
-#     auth.login()
-
-#     assert client.get('/create').status_code == 200
-#     response = client.post(
-#         '/create',
-#         data={'title': 'created', 'body': 'createdBody', 'image': '', 'githuburl': '', 'moreinfourl': ''},
-#     )
-
-#     with app.app_context():
-#         count = db.engine.execute('SELECT COUNT(id) FROM projects').fetchone()[0]
-#         assert count == 2
-
-# #Test that we can update a post
-# def test_update(client, auth, app):
-#     auth.login()
-#     assert client.get('/1/edit').status_code == 200
-#     with app.app_context():
-#         project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
-
-#     print(project)
-#     print(project['body'])
-#     response = client.post(
-#         '/1/edit',
-#         data={
-#             'title': 'edited',
-#             'body': project['body'],
-#             'image': project['image'],
-#             'githuburl': project['githuburl'],
-#             'moreinfourl': project['moreinfourl']
-#         }
-#     )
-#     print(response)
-
-#     with app.app_context():
-#         project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
-#         assert project['title'] == 'edited'
-
-# #Show an error on invalid title/body data
-# @pytest.mark.parametrize('path', (
-#     '/create',
-#     '/1/edit',
-# ))
-# def test_create_update_validate(client, auth, path):
-#     auth.login()
-#     response = client.post(path, data={'title': '', 'body': '', 'image': 'image text', 'githuburl': 'github text', 'moreinfourl': 'more info url text'})
-#     print(response, response.status_code)
-#     assert b'Title is required.' in response.data
-
-# def test_delete(client, auth, app):
-#     auth.login()
-#     response = client.post('/1/delete')
-#     assert response.headers['Location'] == 'http://localhost/'
-
-#     with app.app_context():
-#         project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
-#         assert project is None
+    with app.app_context():
+        comment = db.engine.execute('SELECT * FROM comments WHERE id = 1').fetchone()
+        assert comment is None
