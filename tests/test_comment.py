@@ -2,6 +2,7 @@ import pytest
 from flask import g, session
 from hobbyProjectWebsite.db import db
 from hobbyProjectWebsite.models import User, Project, Comment
+from flask_login import current_user
 
 def test_index(client, auth):
     response = client.get('/1')
@@ -16,7 +17,9 @@ def test_index(client, auth):
 ))
 def test_comment_login_required(client, path):
     response = client.post(path)
-    assert response.headers['Location'] == 'http://localhost/auth/login'
+    #After logging in we get redirected to the previous page with Flask-Login's next query parameter
+    redirectLocation = response.headers['Location'].replace('%2F','/')
+    assert redirectLocation == 'http://localhost/auth/login?next=' + path
 
 def test_comment_author_required(app, client, auth):
     #Change the project author to another user
