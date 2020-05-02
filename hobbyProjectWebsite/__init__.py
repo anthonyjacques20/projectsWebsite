@@ -63,5 +63,6 @@ def create_app(test_config=None):
     loginManager.init_app(app)
     #Tell Flask-Login which function ('login') to use when trying to login
     loginManager.login_view = 'auth.login'
+    loginManager.login_message_category = "info"
 
     return app
