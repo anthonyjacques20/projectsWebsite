@@ -118,3 +118,8 @@ def test_delete(client, auth, app):
         #Confirm project is deleted
         project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
         assert project is None
+
+def test_projects_nav(client):
+    response = client.get('/')
+    assert b'Projects' in response.data
+    assert b'navbarDropdown' in response.data
