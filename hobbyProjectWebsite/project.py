@@ -125,5 +125,8 @@ def edit(id):
 @login_required
 def delete(id):
     get_project(id)
+    #Delete comments for that project
+    db.engine.execute('DELETE FROM comments where project_id = ' + str(id))
+    #Delete the project
     db.engine.execute('DELETE FROM projects WHERE id = ' + str(id))
     return redirect(url_for('project.index'))

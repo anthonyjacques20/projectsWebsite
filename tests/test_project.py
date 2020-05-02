@@ -1,6 +1,7 @@
 import pytest
 from flask import g, session
 from hobbyProjectWebsite.db import db
+from hobbyProjectWebsite.models import User, Project, Comment
 
 def test_index(client, auth):
     response = client.get('/')
@@ -63,7 +64,7 @@ def test_create(client, auth, app):
         count = db.engine.execute('SELECT COUNT(id) FROM projects').fetchone()[0]
         assert count == 2
 
-#Test that we can update a post
+#Test that we can update a project
 def test_update(client, auth, app):
     auth.login()
     assert client.get('/1/edit').status_code == 200
@@ -101,9 +102,16 @@ def test_create_update_validate(client, auth, path):
 
 def test_delete(client, auth, app):
     auth.login()
+    with app.app_context():
+        #Confirm there is a comment
+        assert db.session.query(Comment).filter(Comment.project_id == 1).count() == 1
+
     response = client.post('/1/delete')
     assert response.headers['Location'] == 'http://localhost/'
 
     with app.app_context():
+        #Confirm comments are deleted
+        assert db.session.query(Comment).filter(Comment.project_id == 1).count() == 0
+        #Confirm project is deleted
         project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
         assert project is None
