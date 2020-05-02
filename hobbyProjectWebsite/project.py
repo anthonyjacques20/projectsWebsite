@@ -8,6 +8,7 @@ from hobbyProjectWebsite.auth import login_required
 from hobbyProjectWebsite.db import db
 from hobbyProjectWebsite.comment import get_comments
 from hobbyProjectWebsite.models import Project, User, Comment
+from flask_login import current_user
 
 bp = Blueprint('project', __name__)
 
@@ -40,7 +41,7 @@ def create():
             flash(error, 'error')
         else:
             project = Project(
-                author_id = g.user['id'],
+                author_id = current_user.id,
                 created = datetime.now(),
                 title = title,
                 body = body,
@@ -79,7 +80,7 @@ def get_project(id, check_author=True):
     if project is None:
         abort(404, "Project id {0} doesn't exist.".format(id))
 
-    if check_author and project['author_id'] != g.user['id']:
+    if check_author and project['author_id'] != current_user.id:
         abort(403)
 
     columns = ['id', 'title', 'body', 'image', 'githuburl', 'moreinfourl', 'created', 'author_id', 'username']

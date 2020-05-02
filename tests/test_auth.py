@@ -1,6 +1,7 @@
 import pytest
 from flask import g, session
 from hobbyProjectWebsite.db import db
+from flask_login import current_user
 
 def test_register(client, app):
     #Make sure the page responds with status of 200
@@ -41,8 +42,8 @@ def test_login(client, auth):
 
     with client:
         client.get('/')
-        assert session['user_id'] == 1
-        assert g.user['username'] == 'test'
+        assert current_user.id == 1
+        assert current_user.username == 'test'
 
 @pytest.mark.parametrize(('username', 'password', 'message'),(
     ('a', 'test', b'Incorrect username.'),

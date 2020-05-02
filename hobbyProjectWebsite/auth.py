@@ -4,11 +4,17 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
+from flask_login import login_required, login_user, logout_user
+
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.urls import url_parse
 from hobbyProjectWebsite.db import db
 from hobbyProjectWebsite.models import Project, User, Comment
+from flask_login import LoginManager, current_user, login_user
 
 bp = Blueprint('auth', __name__, url_prefix="/auth")
+
+loginManager = LoginManager()
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
@@ -41,6 +47,9 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    #Redirect user to index page if they are already logged in
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -49,68 +58,40 @@ def login():
 
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user.password, password):
             error = 'Incorrect password.'
 
         if error is None:
-            #Session is a dict that stores data across requests
-            #When validation succeeds, the user's id is stored in a new session.
-            #Data is stored in a cookie that is sent to the browser and the browser sends it back
-            #With sub-sequent requests.  Flask signs the data so it can't be tampererd
-            session.clear()
-            session['user_id'] = user['id']
+            login_user(user)
             flash("Successfully logged in as " + username, "info")
-            return redirect(url_for('index'))
+            nextPage = request.args.get('next')
+            #Make sure the URL is not null and that the URL is on our current domain
+            #We don't want someone to modify the next request parameter to send the user to a different site
+            #As this causes security concerns...
+            if not nextPage or url_parse(nextPage).netloc != '':
+                return redirect(url_for('index'))
+            return redirect(nextPage)
 
         flash(error, 'warning')
 
     return render_template('auth/login.html', page="login")
 
-#This registers a function to run before the view function, no matter what URL is requested
-@bp.before_app_request
-def load_logged_in_user():
-    user_id = session.get('user_id')
-
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = getUserByID(user_id)
-
 @bp.route('/logout')
 def logout():
-    session.clear()
+    logout_user()
     #Flash the logout message
     flash("Successfully logged out!", 'info')
     return redirect(url_for('index'))
 
 #Create a function to return the user
 def getUser(username):
-    user = User.query.filter(User.username == username).first()
-    if user:
-        columns = ['id', 'username', 'password']
-        #Return the dictionary
-        return {columns[i]: getattr(user, columns[i]) for i in range(0,len(user)) }
-    else:
-        return None
+    return User.query.filter(User.username == username).first()
     
 #Create a function to return the user by id
 def getUserByID(id):
-    user = User.query.filter(User.id == id).first()
-    if user:
-        columns = ['id', 'username', 'password']
-        #Return the dictionary
-        return {columns[i]: getattr(user, columns[i]) for i in range(0,len(user)) }
-    else:
-        return None
-    
-#This function checks to see if the user is logged in
-#If a user is logged in, then it continues to the view
-#If the user is NOT logged in, the it redirects to the login page
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-        
-        return view (**kwargs)
-    return wrapped_view
+    return User.query.filter(User.id == id).first()
+
+#This tells flask-login how to get the user login information
+@loginManager.user_loader
+def load_user(id):
+    return User.query.get(int(id))

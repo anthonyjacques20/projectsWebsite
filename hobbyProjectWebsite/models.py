@@ -2,8 +2,9 @@ from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy import Column, ForeignKey, Integer, Text, DateTime
 import datetime 
 from hobbyProjectWebsite.db import db
+from flask_login import UserMixin
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = Column(Integer, primary_key = True)
     username = Column(Text,  nullable = False, unique = True)
@@ -22,7 +23,6 @@ class User(db.Model):
 
     def __len__(self):
         return 3
-
 
 class Project(db.Model):
     __tablename__ = 'projects'

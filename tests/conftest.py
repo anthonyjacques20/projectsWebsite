@@ -6,9 +6,6 @@ import pytest
 from hobbyProjectWebsite import create_app
 from hobbyProjectWebsite.db import init_db, db
 
-with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
-    _data_sql = f.read().decode('utf8')
-
 @pytest.fixture
 def app():
     #Provide the path to our testing database

@@ -9,6 +9,7 @@ from werkzeug.exceptions import abort
 from hobbyProjectWebsite.auth import login_required
 from hobbyProjectWebsite.db import db
 from hobbyProjectWebsite.models import Project, User, Comment
+from flask_login import current_user
 
 bp = Blueprint('comment', __name__, url_prefix="/<int:id>/comments")
 
@@ -20,7 +21,7 @@ def create(id):
         text = request.form['text']
         #Grab the id from the url_prefix
         project_id = id
-        author_id = g.user['id']
+        author_id = current_user.id
         error = None
 
         if not text:
@@ -55,7 +56,7 @@ def edit(id, commentID):
         text = request.form['text']
         #Grab the id from the url_prefix
         project_id = id
-        author_id = g.user['id']
+        author_id = current_user.id
         error = None
 
         if not text:
@@ -102,7 +103,7 @@ def getComment(commentID):
     if comment:
         columns = ['id', 'text', 'created', 'username', 'author_id']
         #Abort if someone other than the author tries to edit a comment
-        if getattr(comment, 'author_id') != g.user['id']:
+        if getattr(comment, 'author_id') != current_user.id:
             abort(403)
         #Return the dictionary
         return {columns[i]: getattr(comment, columns[i]) for i in range(0,len(columns)) }
