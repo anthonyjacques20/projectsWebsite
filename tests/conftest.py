@@ -16,6 +16,7 @@ def app():
 
     app = create_app({
         #Tell flask that the app is in test mode
+        #This disable error catching so we get better error reports
         'TESTING': True,
         'CSRF_ENABLED': True,
         'SECRET_KEY': os.environ['SECRET_KEY'],
