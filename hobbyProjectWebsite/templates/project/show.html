@@ -20,41 +20,41 @@
         <p class="h5">{{ project['body'] }}</p>
         {% if comments|length > 0 %}
             <hr>
-        {% endif %}
-        <div class="card">
-            <ul class="list-group list-group-flush">
-                {% for comment in comments %}
-                    <li class="list-group-item">
-                        <div class="row justify-content-between">
-                            <div class="col-9">
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    {% for comment in comments %}
+                        <li class="list-group-item">
+                            <div class="row justify-content-between">
+                                <div class="col-9">
+                                    {{ comment['text'] }}
+                                </div>
+                                <div class="col-2 text-secondary">
+                                    <small class="d-none d-sm-inline">by {{ comment['username'] }} on {{ comment['created'].strftime('%Y-%m-%d %H:%M') }}</small>
+                                    {% if current_user.is_authenticated and (current_user.username == comment['username']) %}
+                                    <div class="row justify-content-around">
+                                        <a class="btn btn-info btn-sm" href="{{ url_for('comment.edit', id=project['id'], commentID=comment['id']) }}">Edit</a>
+                                        <form action="{{ url_for('comment.delete', id=project['id'], commentID=comment['id']) }}" method="post">
+                                            <button class="btn btn-danger btn-small" onclick="return confirm('Are you sure?');">Delete</button>
+                                        </form>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                        {# <li class="list-group-item">{{ comment['text'] }}<span class="float-right">by {{ comment['author_id'] }} on {{ comment['created'].strftime('%Y-%m-%d') }}</span></li> #}
+                        {# <div class="row justify-content-between"> #}
+                            {# <li class="list-group-item">{{ comment['text'] }}</li>
+                            <li class="list-group-item text-secondary">by {{ comment['author_id'] }} on {{ comment['created'].strftime('%Y-%m-%d') }}</li> #}
+                        {# </div> #}
+                        {# <div class="card">
+                            <div class="card-body">
                                 {{ comment['text'] }}
                             </div>
-                            <div class="col-2 text-secondary">
-                                <small class="d-none d-sm-inline">by {{ comment['username'] }} on {{ comment['created'].strftime('%Y-%m-%d %H:%M') }}</small>
-                                {% if current_user.is_authenticated and (current_user.username == comment['username']) %}
-                                <div class="row justify-content-around">
-                                    <a class="btn btn-info btn-sm" href="{{ url_for('comment.edit', id=project['id'], commentID=comment['id']) }}">Edit</a>
-                                    <form action="{{ url_for('comment.delete', id=project['id'], commentID=comment['id']) }}" method="post">
-                                        <button class="btn btn-danger btn-small" onclick="return confirm('Are you sure?');">Delete</button>
-                                    </form>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </li>
-                    {# <li class="list-group-item">{{ comment['text'] }}<span class="float-right">by {{ comment['author_id'] }} on {{ comment['created'].strftime('%Y-%m-%d') }}</span></li> #}
-                    {# <div class="row justify-content-between"> #}
-                        {# <li class="list-group-item">{{ comment['text'] }}</li>
-                        <li class="list-group-item text-secondary">by {{ comment['author_id'] }} on {{ comment['created'].strftime('%Y-%m-%d') }}</li> #}
-                    {# </div> #}
-                    {# <div class="card">
-                        <div class="card-body">
-                            {{ comment['text'] }}
-                        </div>
-                    </div> #}
-                {% endfor %}
-            </ul>
-        </div>
+                        </div> #}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <hr>
         {% if current_user.is_authenticated %}
             <form action="{{ url_for('comment.create', id=project['id']) }}" method="post">
