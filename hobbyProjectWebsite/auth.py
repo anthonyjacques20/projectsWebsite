@@ -68,7 +68,7 @@ def login():
             #Make sure the URL is not null and that the URL is on our current domain
             #We don't want someone to modify the next request parameter to send the user to a different site
             #As this causes security concerns...
-            if not nextPage or url_parse(nextPage).netlog != '':
+            if not nextPage or url_parse(nextPage).netloc != '':
                 return redirect(url_for('index'))
             return redirect(nextPage)
 
