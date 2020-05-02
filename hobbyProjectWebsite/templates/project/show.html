@@ -31,7 +31,7 @@
                             </div>
                             <div class="col-2 text-secondary">
                                 <small class="d-none d-sm-inline">by {{ comment['username'] }} on {{ comment['created'].strftime('%Y-%m-%d %H:%M') }}</small>
-                                {% if g.user and (g.user['username'] == comment['username']) %}
+                                {% if current_user.is_authenticated and (current_user.username == comment['username']) %}
                                 <div class="row justify-content-around">
                                     <a class="btn btn-info btn-sm" href="{{ url_for('comment.edit', id=project['id'], commentID=comment['id']) }}">Edit</a>
                                     <form action="{{ url_for('comment.delete', id=project['id'], commentID=comment['id']) }}" method="post">
@@ -56,7 +56,7 @@
             </ul>
         </div>
         <hr>
-        {% if g.user %}
+        {% if current_user.is_authenticated %}
             <form action="{{ url_for('comment.create', id=project['id']) }}" method="post">
                 <div class="form-group row justify-content-around pb-3">
                     <textarea class="form-control col-8" name="text" rows="1" placeholder="Add a comment!"></textarea>
