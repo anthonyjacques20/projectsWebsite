@@ -3,6 +3,14 @@
     margin-left: 1rem;
 }
 
+.navbar.scrolled {
+    background: #0077BF;
+}
+
+.navbar {
+    transition: background 400ms;
+}
+
 #header { 
     background: center center / cover no-repeat;
     position: relative;
@@ -15,6 +23,10 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 40%;
+}
+
+#content {
+    margin-top: 74px;
 }
 
 h1 {
