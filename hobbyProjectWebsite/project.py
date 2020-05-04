@@ -15,6 +15,10 @@ bp = Blueprint('project', __name__,url_prefix="/projects")
 @bp.route('/')
 def index():
     projects = get_projects()
+    for project in projects:
+        maxCharacters = 200
+        if len(project['body']) > maxCharacters:
+            project['body'] = project['body'][:maxCharacters] + '...'
     return render_template('project/index.html', projects=projects, page="home")
 
 @bp.route('/<int:id>')
