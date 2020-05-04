@@ -17,8 +17,9 @@
             Projects
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/projects/">View All</a>
             {% for project in g.projects: %}
-              <a class="dropdown-item" href="/{{ project['id'] }}">{{ project['title'] }}</a>
+              <a class="dropdown-item" href="{{ url_for('project.show', id=project['id']}}">{{ project['title'] }}</a>
             {% endfor %}
           </div>
         </li>
