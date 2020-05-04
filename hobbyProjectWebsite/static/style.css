@@ -49,6 +49,13 @@ h1 {
     color: white;
 }
 
+#aboutDiv {
+    min-height: calc(100vh - 134px);
+    background-image: url(https://images.unsplash.com/photo-1524169113253-c6ba17f68498?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2700&q=80);
+    background-size: cover;
+    background-position: center;
+}
+
 /* Make the div have a background and take up left side of the window */
 .authImage {
     background-repeat: no-repeat;
