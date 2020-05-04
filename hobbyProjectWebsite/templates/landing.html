@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='project.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap" rel="stylesheet">
+{% endblock %}
+
+
+{% block title %}Anthony Jacques{% endblock %}
+
+{% block content %}
+<div id="landingDiv" class="bg-light" style="background-image: url(https://images.unsplash.com/photo-1496715976403-7e36dc43f17b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80)">
+    <div class="container">
+        <h1 class="display-4 text-center text-white pt-5">
+            Hi, I'm Anthony.<br>I'm a Bay Area based Automation and Controls Engineer.
+        </h1>
+
+        <div class="text-light mt-5 text-center">
+            <h4>
+                Experienced in Python and providing simple solutions for complex problems.
+            </h4>
+            <div class="mt-5">
+                <a href="https://www.linkedin.com/in/anthonyjacques20/" target="_blank" class="mx-3"><i class="fab fa-linkedin fa-3x fawhite"></i></a>
+                <a href="https://github.com/anthonyjacques20" target="_blank" class="mx-3"><i class="fab fa-github fa-3x fawhite"></i></a>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+{% endblock %}

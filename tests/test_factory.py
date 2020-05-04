@@ -10,9 +10,3 @@ def test_config():
             'SQLALCHEMY_DATABASE_URI': db_path,
         }
     ).testing
-
-#Example test that checks what we received is correct
-def test_hello(client):
-    response = client.get('/helloWorld')
-    assert response.data == b'Hello World!'
-

@@ -49,7 +49,7 @@ def register():
 def login():
     #Redirect user to index page if they are already logged in
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('landing'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -69,7 +69,7 @@ def login():
             #We don't want someone to modify the next request parameter to send the user to a different site
             #As this causes security concerns...
             if not nextPage or url_parse(nextPage).netloc != '':
-                return redirect(url_for('index'))
+                return redirect(url_for('landing'))
             return redirect(nextPage)
 
         flash(error, 'warning')
@@ -81,7 +81,7 @@ def logout():
     logout_user()
     #Flash the logout message
     flash("Successfully logged out!", 'info')
-    return redirect(url_for('index'))
+    return redirect(url_for('landing'))
 
 #Create a function to return the user
 def getUser(username):

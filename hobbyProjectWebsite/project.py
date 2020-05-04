@@ -10,7 +10,7 @@ from hobbyProjectWebsite.comment import get_comments
 from hobbyProjectWebsite.models import Project, User, Comment
 from flask_login import current_user
 
-bp = Blueprint('project', __name__)
+bp = Blueprint('project', __name__,url_prefix="/projects")
 
 @bp.route('/')
 def index():

@@ -5,13 +5,13 @@ from hobbyProjectWebsite.models import User, Project, Comment
 from flask_login import current_user
 
 def test_index(client, auth):
-    response = client.get('/')
+    response = client.get('/projects/')
     #Make sure the log in and register buttons show up when no one is logged in
     assert b'Log In' in response.data
     assert b'Register' in response.data
 
     auth.login()
-    response = client.get('/')
+    response = client.get('/projects/')
     #Once we are logged in, check if the log out button is visible
     assert b'Log Out' in response.data
     #Check the data
@@ -19,12 +19,12 @@ def test_index(client, auth):
     assert b'by test on 2018-01-01' in response.data
     assert b'test body' in response.data
     #Check for the edit button since the logged in user wrote this test project
-    assert b'href="/1/edit"' in response.data
+    assert b'href="/projects/1/edit"' in response.data
 
 @pytest.mark.parametrize('path',(
-    '/create',
-    '/1/edit',
-    '/1/delete',
+    '/projects/create',
+    '/projects/1/edit',
+    '/projects/1/delete',
 ))
 def test_login_required(client, path):
     response = client.post(path)
@@ -39,14 +39,14 @@ def test_author_required(app, client, auth):
 
     auth.login()
     #Current user can't modify other user's project
-    assert client.post('/1/edit').status_code == 403
-    assert client.post('/1/delete').status_code == 403
+    assert client.post('/projects/1/edit').status_code == 403
+    assert client.post('/projects/1/delete').status_code == 403
     #Current user should not see edit link
-    assert b'href="/1/edit"' not in client.get('/').data
+    assert b'href="/projects/1/edit"' not in client.get('/projects/').data
 
 @pytest.mark.parametrize('path',(
-    '/2/edit',
-    '/2/delete',
+    '/projects/2/edit',
+    '/projects/2/delete',
 ))
 #Return 404 if the post requested doesn't exist
 def test_exists_required(client, auth, path):
@@ -57,9 +57,9 @@ def test_exists_required(client, auth, path):
 def test_create(client, auth, app):
     auth.login()
 
-    assert client.get('/create').status_code == 200
+    assert client.get('/projects/create').status_code == 200
     response = client.post(
-        '/create',
+        '/projects/create',
         data={'title': 'created', 'body': 'createdBody', 'image': '', 'githuburl': '', 'moreinfourl': ''},
     )
 
@@ -70,14 +70,14 @@ def test_create(client, auth, app):
 #Test that we can update a project
 def test_update(client, auth, app):
     auth.login()
-    assert client.get('/1/edit').status_code == 200
+    assert client.get('/projects/1/edit').status_code == 200
     with app.app_context():
         project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
 
     print(project)
     print(project['body'])
     response = client.post(
-        '/1/edit',
+        '/projects/1/edit',
         data={
             'title': 'edited',
             'body': project['body'],
@@ -94,8 +94,8 @@ def test_update(client, auth, app):
 
 #Show an error on invalid title/body data
 @pytest.mark.parametrize('path', (
-    '/create',
-    '/1/edit',
+    '/projects/create',
+    '/projects/1/edit',
 ))
 def test_create_update_validate(client, auth, path):
     auth.login()
@@ -109,8 +109,8 @@ def test_delete(client, auth, app):
         #Confirm there is a comment
         assert db.session.query(Comment).filter(Comment.project_id == 1).count() == 1
 
-    response = client.post('/1/delete')
-    assert response.headers['Location'] == 'http://localhost/'
+    response = client.post('/projects/1/delete')
+    assert response.headers['Location'] == 'http://localhost/projects/'
 
     with app.app_context():
         #Confirm comments are deleted
@@ -120,6 +120,6 @@ def test_delete(client, auth, app):
         assert project is None
 
 def test_projects_nav(client):
-    response = client.get('/')
+    response = client.get('/projects/')
     assert b'Projects' in response.data
     assert b'navbarDropdown' in response.data

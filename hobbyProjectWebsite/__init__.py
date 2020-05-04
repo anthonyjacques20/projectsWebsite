@@ -23,14 +23,10 @@ def create_app(test_config=None):
         #Load the test config if it is passed into the app
         app.config.from_mapping(test_config)
 
-    #Simple route to return
-    @app.route('/hello')
-    def hello():
-	    return render_template('hello.html')
-
-    @app.route('/helloWorld')
-    def helloWorld():
-        return "Hello World!"
+    @app.route('/')
+    def landing():
+        return render_template('landing.html')
+    app.add_url_rule('/', endpoint='landing')
 
     #About route
     @app.route("/about")
@@ -50,7 +46,7 @@ def create_app(test_config=None):
     #The project blueprint does not have an `url_prefix` because it will be at '/'
     from . import project
     app.register_blueprint(project.bp)
-    app.add_url_rule('/', endpoint='index')
+    app.add_url_rule('/projects/', endpoint='index')
 
     from . import comment
     app.register_blueprint(comment.bp)
