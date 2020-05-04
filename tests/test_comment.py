@@ -5,7 +5,7 @@ from hobbyProjectWebsite.models import User, Project, Comment
 from flask_login import current_user
 
 def test_index(client, auth):
-    response = client.get('/1')
+    response = client.get('/projects/1')
     #Make sure the test comment shows up
     assert b'test comment' in response.data
     assert b'by test on 2021-02-02 00:00' in response.data
@@ -43,7 +43,7 @@ def test_comment_edit_exists_required(client, auth):
         }
     )
     #Test that we redirect to the show page
-    assert response.headers['Location'] == 'http://localhost/1'
+    assert response.headers['Location'] == 'http://localhost/projects/1'
 
     #Test that the flash message shows the error by following the redireict
     response = client.post(
@@ -60,7 +60,7 @@ def test_comment_delete_exists_required(client, auth):
     auth.login()
     response = client.post('/1/comments/2/delete')
     #Test that we redirect to the show page
-    assert response.headers['Location'] == 'http://localhost/1'
+    assert response.headers['Location'] == 'http://localhost/projects/1'
     
     response = client.post('/1/comments/2/delete', follow_redirects=True)
     #Test that the flash message shows the error by following the redirect
@@ -114,7 +114,7 @@ def test_create_update_validate_comment(client, auth, path):
 def test_delete(client, auth, app):
     auth.login()
     response = client.post('/1/comments/1/delete')
-    assert response.headers['Location'] == 'http://localhost/1'
+    assert response.headers['Location'] == 'http://localhost/projects/1'
 
     with app.app_context():
         comment = db.engine.execute('SELECT * FROM comments WHERE id = 1').fetchone()
