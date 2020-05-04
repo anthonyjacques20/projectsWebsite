@@ -39,7 +39,7 @@
                                         <a href="/{{ project['id'] }}/edit" class="btn btn-info">Edit</a>
                                     </div>
                                 {% endif %}
-                                <p class="card-text"><small class="text-muted">by {{ project['username'] }} on {{ project['created'] }}</small></p>
+                                <p class="card-text"><small class="text-muted">by {{ project['username'] }} on {{ project['created'].strftime('%Y-%m-%d') }}</small></p>
                             </div>
                         </div>
                     </div>
