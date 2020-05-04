@@ -45,6 +45,10 @@ h1 {
     text-shadow: 2px 1px #000000;
 }
 
+.fawhite {
+    color: white;
+}
+
 /* Make the div have a background and take up left side of the window */
 .authImage {
     background-repeat: no-repeat;
