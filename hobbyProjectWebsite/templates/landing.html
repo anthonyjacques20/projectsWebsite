@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='project.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap" rel="stylesheet">
+{% endblock %}
+
+
+{% block title %}Anthony Jacques{% endblock %}
+
+{% block content %}
+<div id="landingDiv" class="bg-light" style="background-image: url(https://images.unsplash.com/photo-1496715976403-7e36dc43f17b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80)">
+    <div class="container">
+        <h1 class="display-4 text-center text-white shadow-lg">
+            Hi, I'm Anthony.<br>I'm a Bay Area based Automation and Controls Engineer.
+        </h1>
+
+        <div class="text-light mt-5 text-center">
+            <h4>
+                I primarily use Python and structured text.
+                I also use C#, SQL, Jython, and ladder logic at my job.  In my hobby projects, I have used/am using C, Arduino, Assembly, and G-Code.
+                <br>I have a lot of object oriented programming experience since working in the physical world lends itself nicely to creating objects and classes.
+                <br>I've been programming since sophomore year of college and have been learning how to think in code through my computer science internships, my automation and controls jobs, and my hobby projects.
+            </h4>
+        </div>
+    </div>
+
+    
+</div>
+{% endblock %}
