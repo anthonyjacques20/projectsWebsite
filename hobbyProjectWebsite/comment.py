@@ -11,7 +11,7 @@ from hobbyProjectWebsite.db import db
 from hobbyProjectWebsite.models import Project, User, Comment
 from flask_login import current_user
 
-bp = Blueprint('comment', __name__, url_prefix="/<int:id>/comments")
+bp = Blueprint('comment', __name__, url_prefix="/projects/<int:id>/comments")
 
 @bp.route('/', methods=['POST'])
 @login_required

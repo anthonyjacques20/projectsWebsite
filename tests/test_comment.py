@@ -11,9 +11,9 @@ def test_index(client, auth):
     assert b'by test on 2021-02-02 00:00' in response.data
 
 @pytest.mark.parametrize('path',(
-    '/1/comments/',
-    '/1/comments/1/edit',
-    '/1/comments/1/delete',
+    '/projects/1/comments/',
+    '/projects/1/comments/1/edit',
+    '/projects/1/comments/1/delete',
 ))
 def test_comment_login_required(client, path):
     response = client.post(path)
@@ -28,16 +28,16 @@ def test_comment_author_required(app, client, auth):
 
     auth.login()
     #Current user can't modify other user's project
-    assert client.post('/1/comments/1/edit').status_code == 403
-    assert client.post('/1/comments/1/delete').status_code == 403
+    assert client.post('/projects/1/comments/1/edit').status_code == 403
+    assert client.post('/projects/1/comments/1/delete').status_code == 403
     #Current user should not see edit link on project show page
-    assert b'href="/1/comments/1/edit"' not in client.get('/1').data
+    assert b'href="/projects/1/comments/1/edit"' not in client.get('/1').data
 
 #Return to show page if the comment requested doesn't exist
 def test_comment_edit_exists_required(client, auth):
     auth.login()
     response = client.post(
-        '/1/comments/2/edit',
+        '/projects/1/comments/2/edit',
         data={
             'text': 'edited comment text'
         }
@@ -47,7 +47,7 @@ def test_comment_edit_exists_required(client, auth):
 
     #Test that the flash message shows the error by following the redireict
     response = client.post(
-        '/1/comments/2/edit',
+        '/projects/1/comments/2/edit',
         data={
             'text': 'edited comment text'
         },
@@ -58,11 +58,11 @@ def test_comment_edit_exists_required(client, auth):
 #Return to show page if the comment requested doesn't exist
 def test_comment_delete_exists_required(client, auth):
     auth.login()
-    response = client.post('/1/comments/2/delete')
+    response = client.post('/projects/1/comments/2/delete')
     #Test that we redirect to the show page
     assert response.headers['Location'] == 'http://localhost/projects/1'
     
-    response = client.post('/1/comments/2/delete', follow_redirects=True)
+    response = client.post('/projects/1/comments/2/delete', follow_redirects=True)
     #Test that the flash message shows the error by following the redirect
     assert b'Comment not found and unable to be deleted' in response.data
 
@@ -75,7 +75,7 @@ def test_create_comment(client, auth, app):
         assert db.session.query(Comment).count() == 1
 
     response = client.post(
-        '/1/comments/',
+        '/projects/1/comments/',
         data={'text': 'This is the second comment'},
     )
 
@@ -91,7 +91,7 @@ def test_update_comment(client, auth, app):
         comment = Comment.query.filter_by(id=1).first()
 
     response = client.post(
-        '/1/comments/1/edit',
+        '/projects/1/comments/1/edit',
         data={
             'text': 'edited comment text'
         }
@@ -103,8 +103,8 @@ def test_update_comment(client, auth, app):
 
 #Show an error on invalid comment text data
 @pytest.mark.parametrize('path', (
-    '/1/comments/',
-    '/1/comments/1/edit',
+    '/projects/1/comments/',
+    '/projects/1/comments/1/edit',
 ))
 def test_create_update_validate_comment(client, auth, path):
     auth.login()
@@ -113,7 +113,7 @@ def test_create_update_validate_comment(client, auth, path):
 
 def test_delete(client, auth, app):
     auth.login()
-    response = client.post('/1/comments/1/delete')
+    response = client.post('/projects/1/comments/1/delete')
     assert response.headers['Location'] == 'http://localhost/projects/1'
 
     with app.app_context():
