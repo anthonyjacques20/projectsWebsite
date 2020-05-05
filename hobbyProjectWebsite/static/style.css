@@ -108,3 +108,7 @@ h1 {
 .card a:hover img {
     transform: scale(1.15);
 }
+
+#marginTopVH a {
+    margin-top: 8vh;
+}
