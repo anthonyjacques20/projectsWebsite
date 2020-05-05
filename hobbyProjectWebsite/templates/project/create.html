@@ -24,6 +24,12 @@
 						<label class="col-3 col-form-label pl-0" for="image">Image</label>
 						<input class="form-control col-9" type="text" name="image" value="{{ request.form['image'] }}">
 					</div>
+					{% for i in range(10) %}
+						<div id="supportImageDiv{{ i }}" class="form-group row d-none">
+							<label class="col-3 col-form-label pl-0" for="image">Supporting Image</label>
+							<input class="form-control col-9" type="text" name="supportImage[{{ i }}]">
+						</div>
+					{% endfor %}
 					<div class="form-group row">
 						<label class="col-3 col-form-label pl-0" for="githuburl">GitHub URL</label>
 						<input class="form-control col-9" type="text" name="githuburl" value="{{ request.form['githuburl'] }}">
@@ -44,4 +50,9 @@
 		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+<script src="{{ url_for('static', filename='supportingImages.js') }}"></script>>
 {% endblock %}
