@@ -35,11 +35,12 @@ class Project(db.Model):
     image = Column(Text, default = None, nullable = False)
     githuburl = Column(Text, default = None)
     moreinfourl = Column(Text, default = None)
+    supportimages = Column(Text, default = None)
 
     result_all = Column(JSON)
     result_no_stop_words = Column(JSON)
 
-    def __init__(self, author_id, created, title, body, image, githuburl = None, moreinfourl = None):
+    def __init__(self, author_id, created, title, body, image, githuburl = None, moreinfourl = None, supportimages = None):
         self.author_id = author_id
         self.created = created
         self.title = title
@@ -47,12 +48,13 @@ class Project(db.Model):
         self.image = image
         self.githuburl = githuburl
         self.moreinfourl = moreinfourl
+        self.supportimages = supportimages
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
     def __len__(self):
-        return 8
+        return 9
 
 class Comment(db.Model):
     __tablename__ = 'comments'
