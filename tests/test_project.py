@@ -21,6 +21,15 @@ def test_index(client, auth):
     #Check for the edit button since the logged in user wrote this test project
     assert b'href="/projects/1/edit"' in response.data
 
+@pytest.mark.parametrize('path', (
+    '/projects/1',
+    '/projects/'
+))
+def test_edit_button(client, auth, path):
+    auth.login()
+    response = client.get(path)
+    assert b'href="/projects/1/edit"' in response.data
+
 @pytest.mark.parametrize('path',(
     '/projects/create',
     '/projects/1/edit',
@@ -43,6 +52,7 @@ def test_author_required(app, client, auth):
     assert client.post('/projects/1/delete').status_code == 403
     #Current user should not see edit link
     assert b'href="/projects/1/edit"' not in client.get('/projects/').data
+    assert b'href="/projects/1/edit"' not in client.get('/projects/1').data
 
 @pytest.mark.parametrize('path',(
     '/projects/2/edit',
