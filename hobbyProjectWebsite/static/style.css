@@ -69,6 +69,14 @@ h1 {
     background-image: url("/static/projectImage.jpeg");
 }
 
+#projectTitle {
+    min-height: 40vh;
+}
+
+#projectBody {
+    white-space: pre-wrap;
+}
+
 .newProjectImage{
     background: #f7ff00;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to left, #db36a4, #f7ff00);  /* Chrome 10-25, Safari 5.1-6 */
