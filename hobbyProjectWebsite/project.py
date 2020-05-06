@@ -9,6 +9,7 @@ from hobbyProjectWebsite.db import db
 from hobbyProjectWebsite.comment import get_comments
 from hobbyProjectWebsite.models import Project, User, Comment
 from flask_login import current_user
+import json
 
 bp = Blueprint('project', __name__,url_prefix="/projects")
 
@@ -36,6 +37,10 @@ def create():
         image = request.form['image']
         githuburl = request.form['githuburl']
         moreinfourl = request.form['moreinfourl']
+        #Support image is a list of strings
+        #This will take all of the extra keys for 'supportImages'
+        #And make a list for 'supportImages"
+        supportImages = json.dumps(request.form.to_dict(flat=False)['supportImages'])
         error = None
         
         if not title:
@@ -51,7 +56,8 @@ def create():
                 body = body,
                 image = image,
                 githuburl = githuburl,
-                moreinfourl = moreinfourl
+                moreinfourl = moreinfourl,
+                supportimages = supportImages
             )
             db.session.add(project)
             db.session.commit()
@@ -76,7 +82,7 @@ def get_project(id, check_author=True):
     #Another example of how to perform a join using SQLAlechemy rather than raw SQL
     #project = db.session.query(Project, User).join(User, Project.author_id == User.id).first()
     project = db.engine.execute(
-        'SELECT p.id, p.title, p.body, p.image, p.githubURL, p.moreinfoURL, p.created, p.author_id, u.username'
+        'SELECT p.id, p.title, p.body, p.image, p.githubURL, p.moreinfoURL, p.created, p.author_id, u.username, p.supportimages'
         ' FROM projects p JOIN users u ON p.author_id = u.id'
         ' WHERE p.id = ' + str(id)
     ).first()
@@ -87,9 +93,11 @@ def get_project(id, check_author=True):
     if check_author and project['author_id'] != current_user.id:
         abort(403)
 
-    columns = ['id', 'title', 'body', 'image', 'githuburl', 'moreinfourl', 'created', 'author_id', 'username']
+    columns = ['id', 'title', 'body', 'image', 'githuburl', 'moreinfourl', 'created', 'author_id', 'username', 'supportimages']
     #Convert to a dictionary
     project = {columns[i]: project[columns[i]] for i in range(0,len(project)) }
+    if project['supportimages'] is not None:
+        project['supportimages'] = json.loads(project['supportimages'])
 
     return project
 
@@ -105,6 +113,8 @@ def edit(id):
         project['image'] = request.form['image']
         project['githuburl'] = request.form['githuburl']
         project['moreinfourl'] = request.form['moreinfourl']
+        project['supportimages'] = json.dumps(request.form.to_dict(flat=False)['supportimages'])
+
         error = None
 
         if not project['title']:
