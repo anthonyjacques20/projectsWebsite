@@ -49,6 +49,12 @@ class AuthActions(object):
             data={'username': username, 'password': password}
         )
 
+    def loginAdmin(self, username='anthonyjacques20', password='testAdmin'):
+        return self._client.post(
+            '/auth/login',
+            data={'username': username, 'password': password}
+        )
+
     def logout(self):
         return self._client.get('/auth/logout')
 
