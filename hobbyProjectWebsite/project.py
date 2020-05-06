@@ -4,7 +4,7 @@ from flask import (
 from datetime import datetime
 from werkzeug.exceptions import abort
 
-from hobbyProjectWebsite.auth import login_required
+from hobbyProjectWebsite.auth import login_required, adminRequired
 from hobbyProjectWebsite.db import db
 from hobbyProjectWebsite.comment import get_comments
 from hobbyProjectWebsite.models import Project, User, Comment
@@ -30,8 +30,9 @@ def show(id):
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
+@adminRequired
 def create():
-    if request.method == 'POST':
+    if request.method == 'POST':        
         title = request.form['title']
         body = request.form['body']
         image = request.form['image']
@@ -40,7 +41,9 @@ def create():
         #Support image is a list of strings
         #This will take all of the extra keys for 'supportImages'
         #And make a list for 'supportImages"
-        supportImages = json.dumps(request.form.to_dict(flat=False)['supportImages'])
+        supportImages = json.dumps(request.form.to_dict(flat=False)['supportimages'])
+        if supportImages is None:
+            supportImages = ''
         error = None
         
         if not title:
@@ -104,6 +107,7 @@ def get_project(id, check_author=True):
 
 @bp.route('/<int:id>/edit', methods=('GET', 'POST'))
 @login_required
+@adminRequired
 def edit(id):
     project = get_project(id)
 
@@ -138,6 +142,7 @@ def edit(id):
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
+@adminRequired
 def delete(id):
     get_project(id)
     #Delete comments for that project

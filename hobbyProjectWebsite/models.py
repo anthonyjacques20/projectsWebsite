@@ -19,7 +19,7 @@ class User(db.Model, UserMixin):
         self.password = password
 
     def __repr__(self):
-        return '<id {}>'.format(self.id)
+        return '<id {}, username {}>'.format(self.id, self.username)
 
     def __len__(self):
         return 3

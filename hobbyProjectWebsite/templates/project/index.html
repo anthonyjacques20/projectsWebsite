@@ -34,7 +34,7 @@
                                 {% if project['moreinfourl'] is not none and project['moreinfourl'] != '' %}
                                     <a href="{{ project['moreinfourl'] }}" target="_blank" class="btn btn-info">More Information</a>
                                 {% endif %}
-                                {% if current_user.id == project['author_id']%}
+                                {% if current_user.id == project['author_id'] and current_user.username == 'anthonyjacques20'%}
                                     <div class="mt-2">
                                         <a href="{{ url_for('project.edit', id=project['id']) }}" class="btn btn-info">Edit</a>
                                     </div>
@@ -45,7 +45,7 @@
                     </div>
             {% endfor %}
         </div>
-        {% if current_user.is_authenticated %}
+        {% if current_user.is_authenticated and current_user.username == 'anthonyjacques20' %}
             <a class="btn btn-primary btn-block my-3" href="{{ url_for('project.create') }}">Add New Project</a>
         {% endif %}
         <div id="footerSpacer">

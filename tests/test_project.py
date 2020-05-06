@@ -9,6 +9,9 @@ def test_index(client, auth):
     #Make sure the log in and register buttons show up when no one is logged in
     assert b'Log In' in response.data
     assert b'Register' in response.data
+    #Check for the edit button since the logged in user wrote this test project
+    assert b'href="/projects/1/edit"' not in response.data
+
 
     auth.login()
     response = client.get('/projects/')
@@ -16,10 +19,24 @@ def test_index(client, auth):
     assert b'Log Out' in response.data
     #Check the data
     assert b'test title' in response.data
-    assert b'by test on 2018-01-01' in response.data
+    assert b'by anthonyjacques20 on 2018-01-01' in response.data
+    assert b'test body' in response.data
+    #Check for the edit button since the logged in user wrote this test project
+    assert b'href="/projects/1/edit"' not in response.data
+
+def test_index_admin(client, auth):
+    auth.loginAdmin()
+    response = client.get('/projects/')
+    #Once we are logged in, check if the log out button is visible
+    assert b'Log Out' in response.data
+    #Check the data
+    assert b'test title' in response.data
+    assert b'by anthonyjacques20 on 2018-01-01' in response.data
     assert b'test body' in response.data
     #Check for the edit button since the logged in user wrote this test project
     assert b'href="/projects/1/edit"' in response.data
+
+
 
 @pytest.mark.parametrize('path', (
     '/projects/1',
@@ -27,6 +44,15 @@ def test_index(client, auth):
 ))
 def test_edit_button(client, auth, path):
     auth.login()
+    response = client.get(path)
+    assert b'href="/projects/1/edit"' not in response.data
+
+@pytest.mark.parametrize('path', (
+    '/projects/1',
+    '/projects/'
+))
+def test_edit_button_admin(client, auth, path):
+    auth.loginAdmin()
     response = client.get(path)
     assert b'href="/projects/1/edit"' in response.data
 
@@ -46,7 +72,7 @@ def test_author_required(app, client, auth):
     with app.app_context():
         db.engine.execute('UPDATE projects SET author_id = 2 WHERE id = 1')
 
-    auth.login()
+    auth.loginAdmin()
     #Current user can't modify other user's project
     assert client.post('/projects/1/edit').status_code == 403
     assert client.post('/projects/1/delete').status_code == 403
@@ -60,17 +86,27 @@ def test_author_required(app, client, auth):
 ))
 #Return 404 if the post requested doesn't exist
 def test_exists_required(client, auth, path):
-    auth.login()
+    auth.loginAdmin()
     assert client.post(path).status_code == 404
 
 #Confirm we can create a second post
 def test_create(client, auth, app):
     auth.login()
 
-    assert client.get('/projects/create').status_code == 200
+    assert client.get('/projects/create').status_code == 403
     response = client.post(
         '/projects/create',
         data={'title': 'created', 'body': 'createdBody', 'image': '', 'githuburl': '', 'moreinfourl': ''},
+    )
+
+#Confirm we can create a second post
+def test_create_admin(client, auth, app):
+    auth.loginAdmin()
+
+    assert client.get('/projects/create').status_code == 200
+    response = client.post(
+        '/projects/create',
+        data={'title': 'created', 'body': 'createdBody', 'image': '', 'githuburl': '', 'moreinfourl': '', 'supportimages': ''},
     )
 
     with app.app_context():
@@ -79,7 +115,7 @@ def test_create(client, auth, app):
 
 #Test that we can update a project
 def test_update(client, auth, app):
-    auth.login()
+    auth.loginAdmin()
     assert client.get('/projects/1/edit').status_code == 200
     with app.app_context():
         project = db.engine.execute('SELECT * FROM projects WHERE id = 1').fetchone()
@@ -93,7 +129,8 @@ def test_update(client, auth, app):
             'body': project['body'],
             'image': project['image'],
             'githuburl': project['githuburl'],
-            'moreinfourl': project['moreinfourl']
+            'moreinfourl': project['moreinfourl'],
+            'supportimages': project['supportimages']
         }
     )
     print(response)
@@ -108,13 +145,22 @@ def test_update(client, auth, app):
     '/projects/1/edit',
 ))
 def test_create_update_validate(client, auth, path):
-    auth.login()
-    response = client.post(path, data={'title': '', 'body': '', 'image': 'image text', 'githuburl': 'github text', 'moreinfourl': 'more info url text'})
+    auth.loginAdmin()
+    response = client.post(path, data={'title': '', 'body': '', 'image': 'image text', 'githuburl': 'github text', 'moreinfourl': 'more info url text', 'supportimages': 'supporimage1'})
     print(response, response.status_code)
     assert b'Title is required.' in response.data
 
 def test_delete(client, auth, app):
     auth.login()
+    with app.app_context():
+        #Confirm there is a comment
+        assert db.session.query(Comment).filter(Comment.project_id == 1).count() == 1
+
+    response = client.post('/projects/1/delete')
+    assert response.status_code == 403
+
+def test_delete_admin(client, auth, app):
+    auth.loginAdmin()
     with app.app_context():
         #Confirm there is a comment
         assert db.session.query(Comment).filter(Comment.project_id == 1).count() == 1

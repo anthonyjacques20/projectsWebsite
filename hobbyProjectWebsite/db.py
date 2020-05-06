@@ -18,13 +18,16 @@ def init_db(db):
     #Create all tables
     db.create_all()
 
+    adminPassword = generate_password_hash('testAdmin')
+
     #Seed database
     insertUser = '''INSERT INTO users (username, password) VALUES
   ('test', 'pbkdf2:sha256:50000$TCI4GzcX$0de171a4f4dac32e3364c7ddc7c14f3e2fa61f2d17574483f7ffbb431b4acb2f'),
-  ('other', 'pbkdf2:sha256:50000$kJPKsz6N$d2d4784f1b030a9761f5ccaeeaca413f27f2ecb76d6168407af962ddce849f79');'''
+  ('other', 'pbkdf2:sha256:50000$kJPKsz6N$d2d4784f1b030a9761f5ccaeeaca413f27f2ecb76d6168407af962ddce849f79'),
+  ('anthonyjacques20', '{}' );'''.format(adminPassword)
 
-    insertProject = '''INSERT INTO projects (title, body, author_id, created, image, githubURL, moreInfoURL) VALUES
-  ('test title', 'test body', 1, '2018-01-01 00:00:00', 'image text', 'github URL', 'more info URL');'''
+    insertProject = '''INSERT INTO projects (title, body, author_id, created, image, githubURL, moreInfoURL, supportimages) VALUES
+  ('test title', 'test body', 3, '2018-01-01 00:00:00', 'image text', 'github URL', 'more info URL', '["supportimage1", "supportimage2"]');'''
 
     insertComment = '''INSERT INTO comments (text, project_id, author_id, created) VALUES
   ('test comment', 1, 1, '2021-02-02 00:00:00');'''
