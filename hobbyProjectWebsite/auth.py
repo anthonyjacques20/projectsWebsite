@@ -7,6 +7,7 @@ from flask import (
 from flask_login import login_required, login_user, logout_user
 
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.exceptions import abort
 from werkzeug.urls import url_parse
 from hobbyProjectWebsite.db import db
 from hobbyProjectWebsite.models import Project, User, Comment
@@ -95,3 +96,13 @@ def getUserByID(id):
 @loginManager.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+def adminRequired(view):
+    @functools.wraps(view)
+    def wrapper(**kwargs):
+        if(current_user.is_authenticated):
+            if(current_user.username == 'anthonyjacques20'):
+                return view(**kwargs)
+            return abort(405, "Admin privileges required.")
+        return redirect(url_for('auth.login'))
+    return wrapper
