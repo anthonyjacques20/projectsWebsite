@@ -25,13 +25,13 @@ def create_app(test_config=None):
 
     @app.route('/')
     def landing():
-        return render_template('landing.html')
+        return render_template('landing.html', page="home")
     app.add_url_rule('/', endpoint='landing')
 
     #About route
     @app.route("/about")
     def about():
-        return render_template('about.html')
+        return render_template('about.html', page="about")
 
     @app.before_request
     def hook():
