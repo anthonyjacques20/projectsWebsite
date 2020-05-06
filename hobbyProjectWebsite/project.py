@@ -41,7 +41,9 @@ def create():
         #Support image is a list of strings
         #This will take all of the extra keys for 'supportImages'
         #And make a list for 'supportImages"
-        supportImages = json.dumps(request.form.to_dict(flat=False)['supportImages'])
+        supportImages = json.dumps(request.form.to_dict(flat=False)['supportimages'])
+        if supportImages is None:
+            supportImages = ''
         error = None
         
         if not title:
