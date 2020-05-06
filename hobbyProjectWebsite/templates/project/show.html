@@ -20,6 +20,19 @@
 
     <div class="container">
         <p id="projectBody" class="h6">{{ project['body'] }}</p>
+        <div class="row">
+            {% if project['supportimages'] %}
+                {% for image in project['supportimages'] %}
+                    {% if image|length %}
+                        <div class="col-lg-4 col-sm-6">
+                            <div>
+                                <img src="{{ image }}" class="img-thumbnail">
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
         {% if comments|length > 0 %}
             <hr>
             <div class="card">
