@@ -20,7 +20,7 @@ def index():
         maxCharacters = 200
         if len(project['body']) > maxCharacters:
             project['body'] = project['body'][:maxCharacters] + '...'
-    return render_template('project/index.html', projects=projects, page="home")
+    return render_template('project/index.html', projects=projects, page="projects")
 
 @bp.route('/<int:id>')
 def show(id):
