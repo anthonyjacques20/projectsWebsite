@@ -103,6 +103,6 @@ def adminRequired(view):
         if(current_user.is_authenticated):
             if(current_user.username == 'anthonyjacques20'):
                 return view(**kwargs)
-            return abort(405, "Admin privileges required.")
+            return abort(403, "Admin privileges required.")
         return redirect(url_for('auth.login'))
     return wrapper
