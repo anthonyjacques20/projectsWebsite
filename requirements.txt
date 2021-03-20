@@ -12,7 +12,7 @@ gunicorn==20.0.4
 -e git+https://github.com/anthonyjacques20/projectsWebsite.git@39a13052dedfe994eafb5935628235226c8f1560#egg=hobbyProjectWebsite
 isort==4.3.21
 itsdangerous==1.1.0
-Jinja2==2.11.1
+Jinja2==2.11.3
 lazy-object-proxy==1.4.3
 Mako==1.1.2
 MarkupSafe==1.1.1
